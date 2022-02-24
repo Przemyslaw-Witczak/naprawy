@@ -7,4 +7,11 @@ public class DictionaryItem
     public string? Name { get; set; }
 
     public bool InActive { get; set; }
+
+    public string InActiveString {
+        get
+        {
+            return InActive ? "Nieaktyne" : string.Empty;
+        }
+    }
 }

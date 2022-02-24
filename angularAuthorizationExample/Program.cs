@@ -30,7 +30,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddOptions();
 //builder.Services.AddSingleton<INaprawyDbStorage, NaprawyDbStorage>().AddOptions<string>("connectionString");
-var firebirdConnectionString = @"User=SYSDBA;Password=masterkey;Database=D:\DANE\pro_naprawy.gdb; DataSource=172.16.0.2;Port=3050;Dialect=3;Charset=UTF8;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;PacketSize=8192;ServerType = 0;";
+var firebirdConnectionString = builder.Configuration.GetConnectionString("NaprawyConnection");
 builder.Services.AddSingleton<INaprawyDbStorage>(x => new NaprawyDbStorage(firebirdConnectionString));
 //https://stackoverflow.com/questions/53884417/net-core-di-ways-of-passing-parameters-to-constructor
 var app = builder.Build();
