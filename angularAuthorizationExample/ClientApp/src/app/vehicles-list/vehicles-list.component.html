@@ -1,0 +1,21 @@
+<h1 id="tableLabel">Pojazdy</h1>
+
+<p *ngIf="!vehiclesList"><em>Ładowanie...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
+  <thead>
+    <tr>
+      <th>Marka</th>
+      <th>Model</th>        
+      <th>Numer rejestracyjny</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let vehicle of vehiclesList">
+      <td>{{ vehicle.brand}}</td>
+      <td>{{ vehicle.type}}</td>
+      <td>{{ vehicle.registrationNumber}}</td>
+      
+    </tr>
+  </tbody>
+</table>

@@ -4,5 +4,7 @@ namespace angularAuthorizationExample.Abstract;
 
 public interface INaprawyDbStorage
 {
-    List<DictionaryItem> GetAllCzynnosci();
+    List<DictionaryItem> GetAllMaintenancesDictionary();
+    List<PartDictionaryItem> GetAllPartsDictionary();
+    List<VehicleModel> GetAllVehicles();
 }

@@ -1,0 +1,20 @@
+<h1 id="tableLabel">Słownik części</h1>
+
+<p *ngIf="!czesciArray"><em>Ładowanie...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="czesciArray">
+  <thead>
+    <tr>
+      <th>Nazwa</th>
+      <th>Niektywne</th>        
+      <th>Paliwo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let czesc of czesciArray">
+      <td>{{ czesc.name}}</td>
+      <td><div *ngIf="czesc.inActive">Nieaktywne</div></td>      
+      <td><div *ngIf="czesc.isFuel">Paliwo</div></td>      
+    </tr>
+  </tbody>
+</table>

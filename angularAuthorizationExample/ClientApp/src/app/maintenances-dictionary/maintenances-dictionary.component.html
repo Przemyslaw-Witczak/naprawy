@@ -1,0 +1,18 @@
+<h1 id="tableLabel">Słownik czynności</h1>
+
+<p *ngIf="!czynnosciArray"><em>Ładowanie...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="czynnosciArray">
+  <thead>
+    <tr>
+      <th>Nazwa</th>
+      <th>Aktywność</th>        
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let maintenance of czynnosciArray">
+      <td>{{ maintenance.name}}</td>
+      <td>{{ maintenance.inActiveString }}</td>      
+    </tr>
+  </tbody>
+</table>
