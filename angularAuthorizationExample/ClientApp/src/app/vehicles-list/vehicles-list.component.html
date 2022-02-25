@@ -15,12 +15,12 @@
   </thead>
   <tbody>
     <tr *ngFor="let vehicle of vehiclesList" (click)="onSelect(vehicle)" [class.selected]="isSelected(vehicle)">
-      <td><input type="radio" [checked]="isSelected(vehicle)"></td>
+      <td><input class="form-check-input" type="radio" [checked]="isSelected(vehicle)"></td>
       <td>{{ vehicle.brand}}</td>
       <td>{{ vehicle.type}}</td>
       <td>{{ vehicle.registrationNumber}}</td>
-      <td><button (click)="onEdit(vehicle)">Edytuj</button></td>
-      <td><button>Usuń</button></td>
+      <td><button class="btn btn-primary" (click)="onEdit(vehicle)">Edytuj</button></td>
+      <td><button class="btn btn-primary">Usuń</button></td>
     </tr>
   </tbody>
 </table>

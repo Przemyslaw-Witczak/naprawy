@@ -2,8 +2,67 @@
 <p *ngIf="!vehicle"><em>Ładowanie... danych pojazdu {{vehicleId}}</em></p>
 
 <div *ngIf="vehicle != null">
-<h3>{{vehicle.brand}}</h3>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="form-group">
+            <label>Marka:</label>
+            <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid && name.touched" class="form-control" [(ngModel)]="vehicle.brand" name="brand">
+            <small class="text-danger" [class.d-none]="name.valid || name.untouched">Marka pojazdu jest wymagana</small>
+        </div> 
+        
+        <div class="form-group">
+            <label>Model:</label>
+            <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid && name.touched" class="form-control" [(ngModel)]="vehicle.type" name="type">
+            <small class="text-danger" [class.d-none]="name.valid || name.untouched">Model pojazdu jest wymagany</small>
+        </div>
+        
+        <div class="form-group">
+            <label>VIN:</label>
+            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.vin" name="vin">            
+        </div>
+
+        <div class="form-group">
+            <label>Numer silnika:</label>
+            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.engineNumber" name="engineNumber">            
+        </div>
+
+        <div class="form-group">
+            <label>Numer rejestracyjny:</label>
+            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.registrationNumber" name="registrationNumber">            
+        </div>
+
+        <div class="form-group">
+            <label>Rok produkcji:</label>            
+            <input type="number" #productionYear="ngModel" pattern="^\d{4}$" required [class.is-invalid]="productionYear.invalid && productionYear.touched" class="form-control" [(ngModel)]="vehicle.productionYear" name="productionYear">
+            <div *ngIf="productionYear.errors && (productionYear.invalid || productionYear.touched)" >
+                <small class="text-danger" *ngIf="productionYear.errors['required']">Rok produkcji musi być uzupełniony</small>
+                <small class="text-danger" *ngIf="productionYear.errors['pattern']">Rok produkcji musi mieć 4 cyfry</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Data zakupu:</label>
+            <input type="date" #name="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="purchaseDate">            
+        </div>
+
+        <div class="form-group">
+            <label>Data sprzedaży:</label>
+            <input class="form-check-input" type="checkbox" >
+            <input type="date" disabled #name="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="soldDate">            
+        </div>
+<!-- <h3>{{vehicle.brand}}</h3>
 <h3>{{vehicle.type}}</h3>
 <h3>{{vehicle.vin}}</h3>
 <h3>{{vehicle.registrationNumber}}</h3>
+</div>
+
+<div class="form-group">
+    <label>Name</label>
+    <input type="text" class="form-control" ngModel name="userName">
+    <input type="text" class="form-control" [ngModel]="userModel.name" name="userName">
+</div> -->
+
+<div>
+    <button (click)="gotoVehiclesList()" class="btn btn-primary">Powrót</button>
+    <button [disabled]="userForm.form.invalid || topicHasError" class="btn btn-primary"  type="submit">Submit form</button>
 </div>

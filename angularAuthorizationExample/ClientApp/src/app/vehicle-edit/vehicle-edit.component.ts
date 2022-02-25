@@ -12,6 +12,7 @@ export class VehicleEditComponent implements OnInit {
   @Input() public vehicleId: any;
 
   public vehicle : IVehicleAngularModel | null = null;
+  topicHasError = true;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) 
   {
     
@@ -29,6 +30,16 @@ export class VehicleEditComponent implements OnInit {
     this.http.get<IVehicleAngularModel>(this.baseUrl + 'Vehicles/'+this.vehicleId).subscribe(result => {
       this.vehicle = result;      
     }, error => console.error(error));
+
+  }
+
+  gotoVehiclesList()
+  {
+    this.router.navigate(['/vehicles-list']);
+  }
+
+  onSubmit()
+  {
 
   }
 
