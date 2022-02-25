@@ -1,7 +1,9 @@
-<h1 id="tableLabel">Pojazdy</h1>
+<h1 id="tableLabel">Ewidencja pojazdów</h1>
 
 <p *ngIf="!vehiclesList"><em>Ładowanie...</em></p>
 
+<app-vehicle-details [parentData]="selectedVehicle"></app-vehicle-details>
+<hr>
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
   <thead>
     <tr>

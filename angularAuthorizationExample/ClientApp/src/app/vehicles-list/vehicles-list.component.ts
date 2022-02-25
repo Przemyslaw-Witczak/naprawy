@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { IVehicleAngularModel } from './VehicleAngularModel';
 
 
 @Component({
@@ -9,10 +10,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 })
 export class VehiclesListComponent implements OnInit {
 
-  public vehiclesList: VehicleAngularModel[] = [];
+  public vehiclesList: IVehicleAngularModel[] = [];
+  public selectedVehicle: IVehicleAngularModel | null = null;
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<VehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
+    http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
       this.vehiclesList = result;
+      this.selectedVehicle = this.vehiclesList[0];
     }, error => console.error(error));
     console.log("Adres do kontrollera: "+baseUrl);
   }
@@ -22,18 +25,4 @@ export class VehiclesListComponent implements OnInit {
 
 }
 
-interface VehicleAngularModel {
-  id: number;
-  brand: string;  
-  type: string;
-  vin: string;
-  engineNumber: string;
-  registrationNumber: string;
-  productionYear: number;
-  purchaseDate: Date;
-  soldDate: Date;
-  additionalInfo: string;
-  engineCapacity: number;
-  mileage: number;
-  mileageDate: Date;
-}
+

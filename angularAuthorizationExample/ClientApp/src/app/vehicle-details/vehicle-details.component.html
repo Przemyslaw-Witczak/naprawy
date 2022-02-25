@@ -1,0 +1,16 @@
+<div *ngIf="parentData != null">
+    <h2>Wybrany pojazd: {{parentData.registrationNumber}}</h2>
+    <h3>{{parentData.brand}} {{parentData.type}}</h3>
+    
+    <table>
+        <tr><th>Id:</th><td>{{parentData.id}}</td></tr>        
+        <tr><th>VIN:</th><td>{{parentData.vin}}</td></tr>        
+        <tr><th>Rok produkcji:</th><td>{{parentData.productionYear}}</td></tr>
+        <tr><th>Data zakupu:</th><td>{{parentData.purchaseDate| date:'shortDate'}}</td></tr>
+        <tr><th>Data sprzedaży:</th><td>{{ parentData.soldDate | date:'shortDate' }}</td></tr>
+        <tr><th>Pojemność silnika:</th><td>{{parentData.engineCapacity}}</td></tr>
+        <tr><th>Przebieg:</th><td>{{parentData.mileage}}</td></tr>
+        <tr><th>Data aktualizacji przebiegu:</th><td>{{parentData.mileageDate | date:'shortDate'}}</td></tr>        
+    </table>      
+</div>
+

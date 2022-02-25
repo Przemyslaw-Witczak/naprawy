@@ -13,6 +13,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { CzesciDictionaryComponent } from './czesci-dictionary/czesci-dictionary.component';
 import { MaintenancesDictionaryComponent } from './maintenances-dictionary/maintenances-dictionary.component';
 import { VehiclesListComponent } from './vehicles-list/vehicles-list.component';
+import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { VehiclesListComponent } from './vehicles-list/vehicles-list.component';
     HomeComponent,
     CzesciDictionaryComponent,
     MaintenancesDictionaryComponent,
-    VehiclesListComponent
+    VehiclesListComponent,
+    VehicleDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
