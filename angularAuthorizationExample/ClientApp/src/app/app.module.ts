@@ -14,6 +14,7 @@ import { CzesciDictionaryComponent } from './czesci-dictionary/czesci-dictionary
 import { MaintenancesDictionaryComponent } from './maintenances-dictionary/maintenances-dictionary.component';
 import { VehiclesListComponent } from './vehicles-list/vehicles-list.component';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
+import { VehicleEditComponent } from './vehicle-edit/vehicle-edit.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
     CzesciDictionaryComponent,
     MaintenancesDictionaryComponent,
     VehiclesListComponent,
-    VehicleDetailsComponent
+    VehicleDetailsComponent,
+    VehicleEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,7 +36,9 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'czesci-dictionary', component: CzesciDictionaryComponent, canActivate: [AuthorizeGuard] },
       { path: 'maintenances-dictionary', component: MaintenancesDictionaryComponent, canActivate: [AuthorizeGuard] },
-      { path: 'vehicles-list', component: VehiclesListComponent, canActivate: [AuthorizeGuard] }
+      { path: 'vehicles-list', component: VehiclesListComponent, canActivate: [AuthorizeGuard] },
+      { path: 'vehicles-list/:vehicleId', component: VehicleEditComponent, canActivate: [AuthorizeGuard] },
+      { path: 'vehicle-edit', component: VehicleEditComponent, canActivate: [AuthorizeGuard] }
     ])
   ],
   providers: [

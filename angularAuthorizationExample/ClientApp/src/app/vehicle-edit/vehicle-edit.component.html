@@ -1,0 +1,9 @@
+
+<p *ngIf="!vehicle"><em>Ładowanie... danych pojazdu {{vehicleId}}</em></p>
+
+<div *ngIf="vehicle != null">
+<h3>{{vehicle.brand}}</h3>
+<h3>{{vehicle.type}}</h3>
+<h3>{{vehicle.vin}}</h3>
+<h3>{{vehicle.registrationNumber}}</h3>
+</div>

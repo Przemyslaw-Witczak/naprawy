@@ -94,4 +94,37 @@ order by p.marka collate pxw_plk, p.model, p.rocznik");
         }
         
     }
+
+    public VehicleModel GetVehicleById(int vehicleId)
+    {        
+        VehicleModel vehicle = null;
+        using (var context = new FbCoreClient(_connectionString))
+        {
+            context.AddSQL(@"select p.marka, p.model, p.numer_vin, p.numer_silnika, p.numer_rejestracyjny, p.numer_rejestracyjny,
+p.rocznik, p.data_zakupu, p.sprzedany, p.adnotacje, p.pojemnosc
+from pojazdy p
+where p.id = @id");
+
+            context.ParamByName("id", FirebirdSql.Data.FirebirdClient.FbDbType.Integer).Value = vehicleId;
+            context.Execute();
+            while(context.Read())
+            {
+                vehicle = new VehicleModel()
+                {
+                    Id = vehicleId,
+                    Brand = context.GetString("marka"),
+                    Type = context.GetString("model"),
+                    Vin = context.GetString("numer_vin"),
+                    EngineNumber = context.GetString("numer_silnika"),
+                    RegistrationNumber = context.GetString("numer_rejestracyjny"),
+                    ProductionYear = context.GetInt16("rocznik"),
+                    PurchaseDate = context.IsDBNull("data_zakupu") ? null : context.GetDateTime("data_zakupu"),
+                    SoldDate = context.IsDBNull("sprzedany") ? null : context.GetDateTime("sprzedany"),
+                    AdditionalInfo = context.GetString("adnotacje"),
+                    EngineCapacity = context.IsDBNull("pojemnosc") ? null : context.GetInt16("pojemnosc")
+                };                
+            }
+            return vehicle;
+        }
+    }
 }

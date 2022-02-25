@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IVehicleAngularModel } from './VehicleAngularModel';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class VehiclesListComponent implements OnInit {
 
   public vehiclesList: IVehicleAngularModel[] = [];
   public selectedVehicle: IVehicleAngularModel | null = null;
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router, private route: ActivatedRoute) {
     http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
       this.vehiclesList = result;
       this.selectedVehicle = this.vehiclesList[0];
@@ -23,6 +24,20 @@ export class VehiclesListComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onSelect(vehicle: IVehicleAngularModel | null)
+  {
+    this.selectedVehicle = vehicle;
+  }
+
+  isSelected(vehicle: IVehicleAngularModel | null)
+  {
+    return (this.selectedVehicle!=null && this.selectedVehicle.id == vehicle?.id)
+  }
+
+  onEdit(vehicle:IVehicleAngularModel)
+  {
+    this.router.navigate(['/vehicles-list', vehicle.id])
+  }
 }
 
 

@@ -19,7 +19,7 @@ namespace angularAuthorizationExample.Controllers
             _dbStorage = dbStorage;        
         }
 
-        [HttpGet]
+        [HttpGet]        
         public IEnumerable<VehicleModel> GetAllVehicles()
         {
             
@@ -33,6 +33,22 @@ namespace angularAuthorizationExample.Controllers
                 _logger.LogError($"Exception in {nameof(GetAllVehicles)}.", ex);
             }      
             return new List<VehicleModel>();  
+        }
+
+        [HttpGet]
+        [Route("{vehicleId}")]
+        public VehicleModel GetVehicleById(int vehicleId)
+        {
+            
+            try
+            {
+                return _dbStorage.GetVehicleById(vehicleId);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Exception in {nameof(GetAllVehicles)}.", ex);
+            }      
+            return null;  
         }
     }
 }
