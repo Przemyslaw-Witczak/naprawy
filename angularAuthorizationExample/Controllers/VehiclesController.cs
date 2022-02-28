@@ -7,7 +7,7 @@ namespace angularAuthorizationExample.Controllers
     //[Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class VehiclesController
+    public class VehiclesController : ControllerBase
     {
         private readonly ILogger<VehiclesController> _logger;
     
@@ -50,5 +50,19 @@ namespace angularAuthorizationExample.Controllers
             }      
             return null;  
         }
+    
+        [HttpPost]
+        public ActionResult<VehicleModel> SaveVehicle([FromBody]VehicleModel vehicle)
+        {
+            _dbStorage.CreateOrUpdateVehicle(vehicle);
+            return CreatedAtAction(nameof(GetVehicleById), new {id=vehicle.Id}, vehicle);
+        }
+
+        // [HttpPost]
+        // public void SaveVehicle([FromBody]string message)
+        // {
+        //     Console.WriteLine($"Dupa: {message}");
+        //     //return CreatedAtAction(nameof(GetVehicleById), new {echo=message}, message);
+        // }
     }
 }

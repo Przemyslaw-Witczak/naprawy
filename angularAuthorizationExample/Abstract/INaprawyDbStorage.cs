@@ -8,4 +8,5 @@ public interface INaprawyDbStorage
     List<PartDictionaryItem> GetAllPartsDictionary();
     List<VehicleModel> GetAllVehicles();
     VehicleModel GetVehicleById(int vehicleId);
+    void CreateOrUpdateVehicle(VehicleModel vehicleModel);
 }

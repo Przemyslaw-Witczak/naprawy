@@ -1,6 +1,7 @@
 using angularAuthorizationExample.Abstract;
 using angularAuthorizationExample.Models;
 using FbCoreClientNameSpace;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace angularAuthorizationExample.Data;
 
@@ -125,6 +126,66 @@ where p.id = @id");
                 };                
             }
             return vehicle;
+        }
+    }
+
+    public void CreateOrUpdateVehicle(VehicleModel vehicleModel)
+    {
+        using (var context = new FbCoreClient(_connectionString))
+        {
+            context.AddSQL(@"select * from DODAJ_EDYTUJ_POJAZD(:id_pojazdy_we,
+                        :marka,
+                        :model,
+                        :numer_vin,
+                        :numer_silnika,
+                        :numer_rejestracyjny,
+                        :rocznik,
+                        :data_zakupu,
+                        :sprzedany,
+                        :adnotacje,
+                        :pojemnosc)");
+
+            if (vehicleModel.Id!=0)
+                context.ParamByName("id_pojazdy_we", FbDbType.Integer).Value = vehicleModel.Id;
+            else    
+                context.SetNull("id_pojazdy_we");
+
+            context.ParamByName("marka", FbDbType.VarChar).Value = vehicleModel.Brand;
+            context.ParamByName("model", FbDbType.VarChar).Value = vehicleModel.Type;
+            context.ParamByName("numer_vin", FbDbType.VarChar).Value = vehicleModel.Vin;
+            
+            if (string.IsNullOrEmpty(vehicleModel.EngineNumber))
+                context.SetNull("numer_silnika");
+            else
+                context.ParamByName("numer_silnika", FbDbType.VarChar).Value = vehicleModel.EngineNumber;
+            if (string.IsNullOrEmpty(vehicleModel.RegistrationNumber))
+                context.SetNull("numer_rejestracyjny");
+            else
+                context.ParamByName("numer_rejestracyjny", FbDbType.VarChar).Value = vehicleModel.RegistrationNumber;
+            
+            context.ParamByName("rocznik", FbDbType.SmallInt).Value = vehicleModel.ProductionYear;
+            if (vehicleModel.PurchaseDate==null)
+                context.SetNull("data_zakupu");
+            else
+                context.ParamByName("data_zakupu", FbDbType.Date).Value = vehicleModel.PurchaseDate;
+            if (vehicleModel.SoldDate==null)
+                context.SetNull("sprzedany");
+            else
+                context.ParamByName("sprzedany", FbDbType.Date).Value = vehicleModel.SoldDate;
+            if (string.IsNullOrEmpty(vehicleModel.AdditionalInfo))
+                context.SetNull("adnotacje");
+            else
+            context.ParamByName("adnotacje", FbDbType.VarChar).Value = vehicleModel.AdditionalInfo;
+            
+            context.ParamByName("pojemnosc", FbDbType.SmallInt).Value = vehicleModel.EngineCapacity;
+
+            context.ExecuteNonQuery();
+            if (context.Read())
+            {
+                vehicleModel.Id = context.GetInt32("id_pojazdy_wy");
+            }
+            
+            
         }
     }
 }

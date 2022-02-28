@@ -6,29 +6,30 @@
 
         <div class="form-group">
             <label>Marka:</label>
-            <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid && name.touched" class="form-control" [(ngModel)]="vehicle.brand" name="brand">
-            <small class="text-danger" [class.d-none]="name.valid || name.untouched">Marka pojazdu jest wymagana</small>
+            <input type="text" required #brand="ngModel" [class.is-invalid]="brand.invalid && brand.touched" class="form-control" [(ngModel)]="vehicle.brand" name="brand">
+            <small class="text-danger" [class.d-none]="brand.valid || brand.untouched">Marka pojazdu jest wymagana</small>
         </div> 
         
         <div class="form-group">
             <label>Model:</label>
-            <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid && name.touched" class="form-control" [(ngModel)]="vehicle.type" name="type">
-            <small class="text-danger" [class.d-none]="name.valid || name.untouched">Model pojazdu jest wymagany</small>
+            <input type="text" required #type="ngModel" [class.is-invalid]="type.invalid && type.touched" class="form-control" [(ngModel)]="vehicle.type" name="type">
+            <small class="text-danger" [class.d-none]="type.valid || type.untouched">Model pojazdu jest wymagany</small>
         </div>
         
         <div class="form-group">
             <label>VIN:</label>
-            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.vin" name="vin">            
+            <input type="text" required #vin="ngModel" class="form-control" [class.is-invalid]="vin.invalid && vin.touched" [(ngModel)]="vehicle.vin" name="vin">            
+            <small class="text-danger" [class.d-none]="vin.valid || vin.untouched">Numer VIN jest wymagany.</small>
         </div>
 
         <div class="form-group">
             <label>Numer silnika:</label>
-            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.engineNumber" name="engineNumber">            
+            <input type="text" #engineNumber="ngModel" class="form-control" [(ngModel)]="vehicle.engineNumber" name="engineNumber">            
         </div>
 
         <div class="form-group">
             <label>Numer rejestracyjny:</label>
-            <input type="text" #name="ngModel" class="form-control" [(ngModel)]="vehicle.registrationNumber" name="registrationNumber">            
+            <input type="text" #registrationNumber="ngModel" class="form-control" [(ngModel)]="vehicle.registrationNumber" name="registrationNumber">            
         </div>
 
         <div class="form-group">
@@ -42,27 +43,16 @@
 
         <div class="form-group">
             <label>Data zakupu:</label>
-            <input type="date" #name="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="purchaseDate">            
+            <input type="date" #purchaseDate="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="purchaseDate">            
         </div>
 
         <div class="form-group">
             <label>Data sprzedaży:</label>
-            <input class="form-check-input" type="checkbox" >
-            <input type="date" disabled #name="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="soldDate">            
+            <input class="form-check-input" type="checkbox" (click)="onSoldDateClick()" [checked]="soldDateIsChecked" >
+            <input type="date" [disabled]="!soldDateIsChecked" #soldDate="ngModel" class="form-control" [(ngModel)]="vehicle.soldDate" name="soldDate">            
         </div>
-<!-- <h3>{{vehicle.brand}}</h3>
-<h3>{{vehicle.type}}</h3>
-<h3>{{vehicle.vin}}</h3>
-<h3>{{vehicle.registrationNumber}}</h3>
-</div>
-
-<div class="form-group">
-    <label>Name</label>
-    <input type="text" class="form-control" ngModel name="userName">
-    <input type="text" class="form-control" [ngModel]="userModel.name" name="userName">
-</div> -->
 
 <div>
     <button (click)="gotoVehiclesList()" class="btn btn-primary">Powrót</button>
-    <button [disabled]="userForm.form.invalid || topicHasError" class="btn btn-primary"  type="submit">Submit form</button>
+    <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Submit form</button>
 </div>

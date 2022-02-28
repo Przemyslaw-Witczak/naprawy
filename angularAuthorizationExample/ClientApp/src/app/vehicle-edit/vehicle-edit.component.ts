@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IVehicleAngularModel } from '../vehicles-list/VehicleAngularModel';
@@ -13,6 +13,8 @@ export class VehicleEditComponent implements OnInit {
 
   public vehicle : IVehicleAngularModel | null = null;
   topicHasError = true;
+  soldDateIsChecked = false;
+  handleData: any;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) 
   {
     
@@ -33,6 +35,14 @@ export class VehicleEditComponent implements OnInit {
 
   }
 
+  onSoldDateClick()
+  {
+    this.soldDateIsChecked = !this.soldDateIsChecked;
+    
+    // if (this.soldDateIsChecked && this.vehicle?.soldDate==null)
+    //   this.vehicle?.soldDate = Date.now();
+  }
+
   gotoVehiclesList()
   {
     this.router.navigate(['/vehicles-list']);
@@ -40,7 +50,17 @@ export class VehicleEditComponent implements OnInit {
 
   onSubmit()
   {
-
+    console.log(this.vehicle);
+    // this.http.post<any>(this.baseUrl + 'Vehicles', this.vehicle).subscribe(result => {
+    //   console.log('Success!', result)
+    // }, error => console.error('Error!', error));
+      const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
+      const body = JSON.stringify(this.vehicle);
+      console.log(headers);
+      console.log(body);
+        return this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
+            console.log('Success!', result)
+          }, error => console.error('Error!', error));
   }
 
 }
