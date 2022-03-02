@@ -10,7 +10,7 @@ import { IVehicleAngularModel } from '../vehicles-list/VehicleAngularModel';
 })
 export class VehicleEditComponent implements OnInit {  
   @Input() public vehicleId: any;
-
+  submitted = false;
   public vehicle : IVehicleAngularModel | null = null;
   topicHasError = true;
   soldDateIsChecked = false;
@@ -50,6 +50,7 @@ export class VehicleEditComponent implements OnInit {
 
   onSubmit()
   {
+    this.submitted = true;
     console.log(this.vehicle);
     // this.http.post<any>(this.baseUrl + 'Vehicles', this.vehicle).subscribe(result => {
     //   console.log('Success!', result)
@@ -58,9 +59,16 @@ export class VehicleEditComponent implements OnInit {
       const body = JSON.stringify(this.vehicle);
       console.log(headers);
       console.log(body);
-        return this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
-            console.log('Success!', result)
+
+      if (this.vehicle!=null)
+      this.router.navigate(['/vehicles-list', this.vehicle.id]); 
+      
+      this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
+            console.log('Vehicle data saved!', result)
           }, error => console.error('Error!', error));
+
+           
+        
   }
 
 }

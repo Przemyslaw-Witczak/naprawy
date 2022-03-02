@@ -2,7 +2,7 @@
 <p *ngIf="!vehicle"><em>Ładowanie... danych pojazdu {{vehicleId}}</em></p>
 
 <div *ngIf="vehicle != null">
-    <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+    <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
 
         <div class="form-group">
             <label>Marka:</label>

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using angularAuthorizationExample.Abstract;
 using angularAuthorizationExample.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -54,8 +55,18 @@ namespace angularAuthorizationExample.Controllers
         [HttpPost]
         public ActionResult<VehicleModel> SaveVehicle([FromBody]VehicleModel vehicle)
         {
+            _logger.LogDebug("Saving vehicle.");
+            try
+            {          
             _dbStorage.CreateOrUpdateVehicle(vehicle);
+            Debug.WriteLine($"Changed vehicle id={vehicle.Id}");            
             return CreatedAtAction(nameof(GetVehicleById), new {id=vehicle.Id}, vehicle);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error saving changes to Vehicle={vehicle?.ToString()}.", ex);
+                throw;
+            }
         }
 
         // [HttpPost]

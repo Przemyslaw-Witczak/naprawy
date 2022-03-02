@@ -60,32 +60,27 @@ public class NaprawyDbStorage : INaprawyDbStorage
         var vehicles = new List<VehicleModel>();
         using (var context = new FbCoreClient(_connectionString))
         {
-            context.AddSQL(@"select p.id, p.marka, p.model, p.numer_vin, p.numer_silnika, p.numer_rejestracyjny, p.numer_rejestracyjny,
-p.rocznik, p.data_zakupu, p.sprzedany, p.adnotacje, p.pojemnosc, n.przebieg, n.przebieg_data
-from pojazdy p
-join (select max(m.przebieg) as przebieg, max(m.data) as przebieg_data, m.id_pojazdy
-         from main m
-        group by m.id_pojazdy) n on n.id_pojazdy = p.id
-order by p.marka collate pxw_plk, p.model, p.rocznik");
+            context.AddSQL(@"select *from POKAZ_POJAZDY");
 
             context.Execute();
             while(context.Read())
             {
                 var vehicle = new VehicleModel()
                 {
-                    Id = context.GetInt32("id"),
+                    Id = context.GetInt32("id_pojazdy"),
                     Brand = context.GetString("marka"),
                     Type = context.GetString("model"),
-                    Vin = context.GetString("numer_vin"),
-                    EngineNumber = context.GetString("numer_silnika"),
-                    RegistrationNumber = context.GetString("numer_rejestracyjny"),
+                    Vin = context.GetString("vin"),
+                    EngineNumber = context.GetString("engine"),
+                    RegistrationNumber = context.GetString("rejestracja"),
                     ProductionYear = context.GetInt16("rocznik"),
                     PurchaseDate = context.IsDBNull("data_zakupu") ? null : context.GetDateTime("data_zakupu"),
                     SoldDate = context.IsDBNull("sprzedany") ? null : context.GetDateTime("sprzedany"),
                     AdditionalInfo = context.GetString("adnotacje"),
                     EngineCapacity = context.IsDBNull("pojemnosc") ? null : context.GetInt16("pojemnosc"),
                     Mileage = context.IsDBNull("") ? 0 : context.GetInt32("przebieg"),
-                    MileageDate = context.IsDBNull("przebieg_data") ? null : context.GetDateTime("przebieg_data")
+                    MileageDate = context.IsDBNull("przebieg_data") ? null : context.GetDateTime("przebieg_data"),
+                    Distance = context.GetInt32("dystans")
                 };
                 vehicles.Add(vehicle);
             }
@@ -179,7 +174,7 @@ where p.id = @id");
             
             context.ParamByName("pojemnosc", FbDbType.SmallInt).Value = vehicleModel.EngineCapacity;
 
-            context.ExecuteNonQuery();
+            context.Execute();
             if (context.Read())
             {
                 vehicleModel.Id = context.GetInt32("id_pojazdy_wy");

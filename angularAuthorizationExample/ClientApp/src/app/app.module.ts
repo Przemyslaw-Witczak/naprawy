@@ -37,7 +37,8 @@ import { VehicleEditComponent } from './vehicle-edit/vehicle-edit.component';
       { path: 'czesci-dictionary', component: CzesciDictionaryComponent, canActivate: [AuthorizeGuard] },
       { path: 'maintenances-dictionary', component: MaintenancesDictionaryComponent, canActivate: [AuthorizeGuard] },
       { path: 'vehicles-list', component: VehiclesListComponent, canActivate: [AuthorizeGuard] },
-      { path: 'vehicles-list/:vehicleId', component: VehicleEditComponent, canActivate: [AuthorizeGuard] },
+      { path: 'vehicles-list/:vehicleId', component: VehiclesListComponent, canActivate: [AuthorizeGuard] },
+      { path: 'vehicle-edit/:vehicleId', component: VehicleEditComponent, canActivate: [AuthorizeGuard] },
       { path: 'vehicle-edit', component: VehicleEditComponent, canActivate: [AuthorizeGuard] }      
     ])
   ],
