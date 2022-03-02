@@ -15,32 +15,39 @@ export class VehicleEditComponent implements OnInit {
   topicHasError = true;
   soldDateIsChecked = false;
   handleData: any;
+  errorMsg = '';
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) 
   {
     
-  
   }
 
   ngOnInit(): void {
     let id = parseInt(this.route.snapshot.paramMap.get('vehicleId') || '');
     this.vehicleId = id;
+    console.log('Inicjalizacja formularza edycji pojazdu='+this.vehicleId)
+    if (this.vehicleId!=NaN)
+    {
+      this.http.get<IVehicleAngularModel>(this.baseUrl + 'Vehicles/'+this.vehicleId).subscribe(result => {
+        this.vehicle = result;    
+        if (this.vehicle.soldDate) 
+          this.soldDateIsChecked = true;       
+        console.log(this.vehicle);  
+      }, error => console.error(error));
+    }
+    else
+    {
+      this.vehicle = <IVehicleAngularModel>{};
+    }
     
-    //let queryParams = new HttpParams();
-    //queryParams = queryParams.append("vehicleId",this.vehicleId);
-
-    //this.http.get<IVehicleAngularModel>(this.baseUrl + 'Vehicles/', {params: queryParams}).subscribe(result => {
-    this.http.get<IVehicleAngularModel>(this.baseUrl + 'Vehicles/'+this.vehicleId).subscribe(result => {
-      this.vehicle = result;      
-    }, error => console.error(error));
-
+    
   }
 
   onSoldDateClick()
   {
     this.soldDateIsChecked = !this.soldDateIsChecked;
-    
-    // if (this.soldDateIsChecked && this.vehicle?.soldDate==null)
-    //   this.vehicle?.soldDate = Date.now();
+    if (this.soldDateIsChecked && this.vehicle && !this.vehicle.soldDate)  
+      this.vehicle.soldDate = new Date();
+
   }
 
   gotoVehiclesList()
@@ -51,24 +58,29 @@ export class VehicleEditComponent implements OnInit {
   onSubmit()
   {
     this.submitted = true;
+    if (!this.soldDateIsChecked && this.vehicle)
+      this.vehicle.soldDate = null;
     console.log(this.vehicle);
-    // this.http.post<any>(this.baseUrl + 'Vehicles', this.vehicle).subscribe(result => {
-    //   console.log('Success!', result)
-    // }, error => console.error('Error!', error));
+    
       const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
       const body = JSON.stringify(this.vehicle);
       console.log(headers);
-      console.log(body);
-
-      if (this.vehicle!=null)
-      this.router.navigate(['/vehicles-list', this.vehicle.id]); 
+      console.log(body);       
       
       this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
-            console.log('Vehicle data saved!', result)
-          }, error => console.error('Error!', error));
+            console.log('Vehicle data saved!', result);
+            if (this.vehicle!=null)
+              this.router.navigate(['/vehicles-list', this.vehicle.id]);    
+          }, error => {
+            console.error('Error!', error);
+            this.errorMsg = error.message+error.error;
+          });
 
-           
+      
+      
         
   }
+
+
 
 }

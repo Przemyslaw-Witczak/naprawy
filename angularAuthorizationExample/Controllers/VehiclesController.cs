@@ -43,13 +43,25 @@ namespace angularAuthorizationExample.Controllers
             
             try
             {
-                return _dbStorage.GetVehicleById(vehicleId);
+                if (vehicleId>0)
+                    return _dbStorage.GetVehicleById(vehicleId);
+                else
+                    return new VehicleModel()
+                    {                                              
+                        Distance = 0,
+                        Mileage = 0,
+                        PurchaseDate = DateTime.Now,
+                        ProductionYear = Convert.ToInt16(DateTime.Now.Year)
+                    };
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Exception in {nameof(GetAllVehicles)}.", ex);
-            }      
-            return null;  
+                _logger.LogError($"Exception in {nameof(GetVehicleById)}.", ex);
+                var result = Content(ex.Message
+                , "application/json; charset=utf-8");
+                HttpContext.Response.StatusCode = 405; //method not allowed
+                return null;
+            }                  
         }
     
         [HttpPost]
@@ -65,7 +77,10 @@ namespace angularAuthorizationExample.Controllers
             catch(Exception ex)
             {
                 _logger.LogError($"Error saving changes to Vehicle={vehicle?.ToString()}.", ex);
-                throw;
+                var result = Content(ex.Message
+                , "application/json; charset=utf-8");
+                HttpContext.Response.StatusCode = 405;
+                return result;
             }
         }
 

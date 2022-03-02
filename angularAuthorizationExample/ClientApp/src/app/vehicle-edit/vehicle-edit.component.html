@@ -1,6 +1,10 @@
 
 <p *ngIf="!vehicle"><em>Ładowanie... danych pojazdu {{vehicleId}}</em></p>
 
+<div class="alert alert-danger" *ngIf="errorMsg">
+    {{errorMsg}}
+</div>
+
 <div *ngIf="vehicle != null">
     <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
 
@@ -26,6 +30,14 @@
             <label>Numer silnika:</label>
             <input type="text" #engineNumber="ngModel" class="form-control" [(ngModel)]="vehicle.engineNumber" name="engineNumber">            
         </div>
+        <div class="form-group">
+            <label>Pojemność silnika [cm^3]:</label>
+            <input type="text" #engineCapacity="ngModel" class="form-control" pattern="^(0|[1-9][0-9]*)$" [class.is-invalid]="engineCapacity.invalid && engineCapacity.touched" [(ngModel)]="vehicle.engineCapacity" name="engineCapacity">            
+            <div *ngIf="engineCapacity.errors && (engineCapacity.invalid || engineCapacity.touched)" >
+                <small class="text-danger" *ngIf="engineCapacity.errors['required']">Pojemność silnika musi być uzupełniona</small>
+                <small class="text-danger" *ngIf="engineCapacity.errors['pattern']">Pojemność silnika musi mieć cyfry</small>
+            </div>
+        </div>
 
         <div class="form-group">
             <label>Numer rejestracyjny:</label>
@@ -43,13 +55,14 @@
 
         <div class="form-group">
             <label>Data zakupu:</label>
-            <input type="date" #purchaseDate="ngModel" class="form-control" [(ngModel)]="vehicle.purchaseDate" name="purchaseDate">            
+                        
+            <input type="date" #purchaseDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="vehicle.purchaseDate | date:'yyyy-MM-dd'" name="purchaseDate" >            
         </div>
 
         <div class="form-group">
             <label>Data sprzedaży:</label>
             <input class="form-check-input" type="checkbox" (click)="onSoldDateClick()" [checked]="soldDateIsChecked" >
-            <input type="date" [disabled]="!soldDateIsChecked" #soldDate="ngModel" class="form-control" [(ngModel)]="vehicle.soldDate" name="soldDate">            
+            <input type="date" [disabled]="!soldDateIsChecked" #soldDate="ngModel" class="form-control" [ngModel]="vehicle.soldDate | date:'yyyy-MM-dd'" (ngModelChange)="vehicle.soldDate=$event" name="soldDate">            
         </div>
 
 <div>

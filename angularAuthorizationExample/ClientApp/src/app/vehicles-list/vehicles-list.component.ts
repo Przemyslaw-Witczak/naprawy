@@ -57,6 +57,11 @@ export class VehiclesListComponent implements OnInit {
   {
     this.router.navigate(['/vehicle-edit', vehicle.id])
   }
+
+  onCreate()
+  {
+    this.router.navigate(['/vehicle-edit', 0]);
+  }
 }
 
 

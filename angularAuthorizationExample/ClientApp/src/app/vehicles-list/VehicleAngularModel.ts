@@ -6,10 +6,11 @@ export interface IVehicleAngularModel {
   engineNumber: string;
   registrationNumber: string;
   productionYear: number;
-  purchaseDate: Date;
-  soldDate: Date;
+  purchaseDate: Date;  
+  soldDate: Date | null;
   additionalInfo: string;
   engineCapacity: number;
   mileage: number;
   mileageDate: Date;
 }
+
