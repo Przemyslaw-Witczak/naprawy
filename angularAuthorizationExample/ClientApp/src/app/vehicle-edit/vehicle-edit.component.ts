@@ -62,19 +62,19 @@ export class VehicleEditComponent implements OnInit {
       this.vehicle.soldDate = null;
     console.log(this.vehicle);
     
-      const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
-      const body = JSON.stringify(this.vehicle);
-      console.log(headers);
-      console.log(body);       
+    const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
+    const body = JSON.stringify(this.vehicle);
+    console.log(headers);
+    console.log(body);       
       
-      this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
-            console.log('Vehicle data saved!', result);
-            if (this.vehicle!=null)
-              this.router.navigate(['/vehicles-list', this.vehicle.id]);    
-          }, error => {
-            console.error('Error!', error);
-            this.errorMsg = error.message+error.error;
-          });
+    this.http.post(this.baseUrl + 'Vehicles', body, {headers}).subscribe(result => {
+          console.log('Vehicle data saved!', result);
+          if (this.vehicle!=null)
+            this.router.navigate(['/vehicles-list', this.vehicle.id]);    
+        }, error => {
+          console.error('Error!', error);
+          this.errorMsg = error.error;
+        });
 
       
       

@@ -1,6 +1,6 @@
 <h1 id="tableLabel">Ewidencja pojazdów</h1>
 
-<p *ngIf="!vehiclesList"><em>Ładowanie...</em></p>
+<p *ngIf="loadingVehicles">Ładowanie...</p>
 
 
 <button class="btn btn-primary" (click)="onCreate()">Dodaj nowy pojazd</button>
@@ -22,7 +22,7 @@
       <td>{{ vehicle.type}}</td>
       <td>{{ vehicle.registrationNumber}}</td>
       <td><button class="btn btn-primary" (click)="onEdit(vehicle)">Edytuj</button></td>
-      <td><button class="btn btn-primary">Usuń</button></td>
+      <td><button class="btn btn-primary" (click)="onDelete(vehicle)">Usuń</button></td>
     </tr>
   </tbody>
 </table>

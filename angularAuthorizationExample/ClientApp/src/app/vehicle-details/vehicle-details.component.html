@@ -10,7 +10,11 @@
         <tr><th>Data sprzedaży:</th><td>{{ parentData.soldDate | date:'shortDate' }}</td></tr>
         <tr><th>Pojemność silnika:</th><td>{{parentData.engineCapacity}}</td></tr>
         <tr><th>Przebieg:</th><td>{{parentData.mileage}}</td></tr>
-        <tr><th>Data aktualizacji przebiegu:</th><td>{{parentData.mileageDate | date:'shortDate'}}</td></tr>        
-    </table>      
+        <tr><th>Data aktualizacji przebiegu:</th><td>{{parentData.mileageDate | date:'shortDate'}}</td></tr>                
+    </table>    
+    <div *ngIf="parentData.displayErrorLine!=''">
+        <h3 class="text-danger">{{parentData.displayErrorLine}}</h3>
+    </div>
+    
 </div>
 

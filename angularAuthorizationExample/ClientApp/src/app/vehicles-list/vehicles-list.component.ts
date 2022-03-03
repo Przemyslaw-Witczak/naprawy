@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { IVehicleAngularModel } from './VehicleAngularModel';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,14 +10,15 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./vehicles-list.component.css']
 })
 export class VehiclesListComponent implements OnInit {
-
+  public loadingVehicles: boolean=true;
   @Input() public editedVehicleId: any;
   public vehiclesList: IVehicleAngularModel[] = [];
   public selectedVehicle: IVehicleAngularModel | null = null;
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) {
     http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
       this.vehiclesList = result;
       this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
+      this.loadingVehicles = false;
     }, error => console.error(error));
     console.log("Adres do kontrollera: "+baseUrl);
     console.log("Pobrano "+this.vehiclesList.length+' pojazdów do wyświetlenia.');
@@ -62,6 +63,30 @@ export class VehiclesListComponent implements OnInit {
   {
     this.router.navigate(['/vehicle-edit', 0]);
   }
+//Another way to show confirmation window:
+//https://stackoverflow.com/questions/41684114/easy-way-to-make-a-confirmation-dialog-in-angular
+  onDelete(vehicle: IVehicleAngularModel)
+  {
+    if(confirm("Czy na pewno chcesz usunąć pojazd "+vehicle.brand+" "+vehicle.type+" "+vehicle.registrationNumber+ "?")) {
+
+      const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });      
+      console.log(headers);      
+        
+      this.http.delete(this.baseUrl + 'Vehicles/'+vehicle.id).subscribe(result => {
+            console.log('Vehicle deleted!', result);
+            console.log("Deleting vehicle id"+vehicle.id);
+            //delete this.vehiclesList[this.vehiclesList.indexOf(vehicle)]; //this deletes element and sets it to undefined
+            this.vehiclesList.splice(this.vehiclesList.indexOf(vehicle),1);
+          }, error => {
+            console.error('Error!', error);
+            
+            vehicle.displayErrorLine = error.error.komunikat.errors[0].errorMessage;
+            //this.errorMsg = error.message+error.error;
+          });
+
+
+      
+
+  }
 }
-
-
+}

@@ -1,4 +1,5 @@
 export interface IVehicleAngularModel {
+  displayErrorLine: string;
   id: number;
   brand: string;
   type: string;

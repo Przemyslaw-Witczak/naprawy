@@ -21,74 +21,108 @@ namespace angularAuthorizationExample.Controllers
         }
 
         [HttpGet]        
-        public IEnumerable<VehicleModel> GetAllVehicles()
+        public async Task<ActionResult> GetAllVehicles()
         {
             
             try
             {
-                return _dbStorage.GetAllVehicles();
+                return Ok(await _dbStorage.GetAllVehicles());
 
             }
             catch(Exception ex)
             {
                 _logger.LogError($"Exception in {nameof(GetAllVehicles)}.", ex);
-            }      
-            return new List<VehicleModel>();  
+                return StatusCode(StatusCodes.Status500InternalServerError, $"There was exception while receiving data by '{nameof(_dbStorage.GetAllVehicles)}' from database: {ex.Message}");
+            }                   
         }
 
         [HttpGet]
         [Route("{vehicleId}")]
-        public VehicleModel GetVehicleById(int vehicleId)
+        public async Task<ActionResult<VehicleModel>> GetVehicleById(int vehicleId)
         {
             
             try
             {
+                Task<VehicleModel> vehicleToReturn;
                 if (vehicleId>0)
-                    return _dbStorage.GetVehicleById(vehicleId);
+                    vehicleToReturn = _dbStorage.GetVehicleById(vehicleId);
                 else
-                    return new VehicleModel()
-                    {                                              
-                        Distance = 0,
-                        Mileage = 0,
-                        PurchaseDate = DateTime.Now,
-                        ProductionYear = Convert.ToInt16(DateTime.Now.Year)
-                    };
+                {
+                    vehicleToReturn = Task.Factory.StartNew(()=>
+                    {
+                        VehicleModel vehicleModel = new VehicleModel()
+                        {
+                            Distance = 0,
+                            Mileage = 0,
+                            PurchaseDate = DateTime.Now,
+                            ProductionYear = Convert.ToInt16(DateTime.Now.Year)
+                        };
+                        return vehicleModel;
+                    });
+                }
+                    
+                return Ok(await vehicleToReturn);
+            }
+            catch(AggregateException aex)
+            {
+                _logger.LogError($"Exception in {nameof(GetVehicleById)}.", aex);                
+                return StatusCode(StatusCodes.Status405MethodNotAllowed, $"There was exception while receiving data by '{nameof(_dbStorage.GetVehicleById)}'for vehicle {vehicleId}. {aex.Message}");
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Exception in {nameof(GetVehicleById)}.", ex);
-                var result = Content(ex.Message
-                , "application/json; charset=utf-8");
-                HttpContext.Response.StatusCode = 405; //method not allowed
-                return null;
+                _logger.LogError($"Exception in {nameof(GetVehicleById)}.", ex);                
+                return StatusCode(StatusCodes.Status405MethodNotAllowed, $"There was exception in {nameof(GetVehicleById)} while receiving data by '{nameof(_dbStorage.GetVehicleById)}'for vehicle {vehicleId}. {ex.Message}");
             }                  
         }
     
         [HttpPost]
-        public ActionResult<VehicleModel> SaveVehicle([FromBody]VehicleModel vehicle)
+        public async Task<ActionResult<VehicleModel>> SaveVehicle([FromBody]VehicleModel vehicle)
         {
-            _logger.LogDebug("Saving vehicle.");
+            Debug.WriteLine($"Changed vehicle {vehicle?.ToString()}");
+            _logger.LogDebug($"Saving vehicle. {vehicle?.ToString()}");
             try
             {          
-            _dbStorage.CreateOrUpdateVehicle(vehicle);
-            Debug.WriteLine($"Changed vehicle id={vehicle.Id}");            
-            return CreatedAtAction(nameof(GetVehicleById), new {id=vehicle.Id}, vehicle);
+                if (vehicle==null)
+                    return BadRequest();
+                await _dbStorage.CreateOrUpdateVehicle(vehicle);
+                //Tu można dodać sprawdzenie.. dlaczego nie można dodać pojazdu i zwrócić inny błąd                 
+                // {
+                //     ModelState.AddModelError("email", "Employee email already in use");
+                //     return BadRequest(ModelState);
+                // }       
+                return CreatedAtAction(nameof(SaveVehicle), new {id=vehicle.Id}, vehicle);
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Error saving changes to Vehicle={vehicle?.ToString()}.", ex);
-                var result = Content(ex.Message
-                , "application/json; charset=utf-8");
-                HttpContext.Response.StatusCode = 405;
-                return result;
+                var errorMessage = $"Error saving changes to Vehicle={vehicle?.ToString()}.";
+                _logger.LogError(errorMessage, ex);
+                return StatusCode(StatusCodes.Status405MethodNotAllowed, errorMessage);
             }
         }
 
-        // [HttpPost]
-        // public void SaveVehicle([FromBody]string message)
-        // {
-        //     Console.WriteLine($"Dupa: {message}");
-        //     //return CreatedAtAction(nameof(GetVehicleById), new {echo=message}, message);
-        // }
+        [HttpDelete("{vehicleId:int}")]
+        public async Task<ActionResult<string>> DeleteEmployee(int vehicleId)
+        {
+            try
+            {
+                if (vehicleId<1)
+                    return BadRequest();
+                // var employeeToDelete = await employeeRepository.GetEmployee(id);
+
+                var message = await _dbStorage.DeleteVehicle(vehicleId);
+                if (!string.IsNullOrEmpty(message))                
+                {                     
+                    ModelState.AddModelError("komunikat", message);
+                    return StatusCode(StatusCodes.Status403Forbidden, ModelState);
+                }
+
+                return await _dbStorage.DeleteVehicle(vehicleId);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error deleting data of vehicle {vehicleId}");
+            }
+        }
     }
 }
