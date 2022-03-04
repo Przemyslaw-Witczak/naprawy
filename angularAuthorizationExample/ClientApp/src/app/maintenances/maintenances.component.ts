@@ -12,7 +12,9 @@ import { IMaintenanceAngularModel } from './MaintenanceModel';
 export class MaintenancesComponent implements OnInit {
   public selectedVehicle: IVehicleAngularModel | null | undefined = null;
   public vehiclesList: IVehicleAngularModel[] = [];
+  
   public maintenancesList: IMaintenanceAngularModel[] = []
+  public selectedMaintenance: IMaintenanceAngularModel | null | undefined = null;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) { 
     http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
@@ -26,6 +28,7 @@ export class MaintenancesComponent implements OnInit {
 
   selectVehicle(){
     this.selectedVehicle = undefined;
+    this.selectedMaintenance = undefined;
   }
 
   onVehicleSelect(vehicle: IVehicleAngularModel)
@@ -40,7 +43,23 @@ export class MaintenancesComponent implements OnInit {
   onMaintenanceSelect(maintenance: IMaintenanceAngularModel)
   {
     //show details of maintenances
-    this.router.navigate([maintenance.id], {relativeTo: this.route});
+    //this.router.navigate([maintenance.id], {relativeTo: this.route});
+    this.selectedMaintenance = maintenance;
+  }
+
+  getSummaryCost(): number
+  {
+    let summaryCost = 0;
+    this.maintenancesList.forEach(obj=>{
+      summaryCost = summaryCost + obj.cost;
+      }
+     )
+      return summaryCost;
+  }
+
+  unselectMaintenance()
+  {
+    this.selectedMaintenance = null;
   }
 
   isMaintenanceSelected(maintenance: IMaintenanceAngularModel)

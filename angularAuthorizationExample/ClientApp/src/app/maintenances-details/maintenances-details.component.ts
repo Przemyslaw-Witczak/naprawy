@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMaintenanceDetailsAngularModel } from '../maintenances/MaintenanceDetailsAngularModel';
 
@@ -9,17 +9,22 @@ import { IMaintenanceDetailsAngularModel } from '../maintenances/MaintenanceDeta
   styleUrls: ['./maintenances-details.component.css']
 })
 export class MaintenancesDetailsComponent implements OnInit {
-  vehicleId:number;
+  @Input('parentMaintenanceId') public parentMaintenanceId : number = 0;
+  
+
   public detailsList: IMaintenanceDetailsAngularModel[] = [];
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) { 
-    let id = parseInt(this.route.snapshot.paramMap.get('maintenanceId') || '');
-    this.vehicleId = id;
-    http.get<IMaintenanceDetailsAngularModel[]>(baseUrl + 'MaintenancesDetails/'+this.vehicleId).subscribe(result => {
-      this.detailsList = result;      
-    }, error => console.error(error));
+    
   }
 
   ngOnInit(): void {
+
+    // let id = parseInt(this.route.snapshot.paramMap.get('maintenanceId') || '');
+    // this.parentMaintenanceId = id;
+    this.http.get<IMaintenanceDetailsAngularModel[]>(this.baseUrl + 'MaintenancesDetails/'+this.parentMaintenanceId).subscribe(result => {
+      this.detailsList = result;      
+    }, error => console.error(error));
+
   }
 
 }
