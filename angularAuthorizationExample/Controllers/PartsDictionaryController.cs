@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 //[Authorize]
 [ApiController]
 [Route("[controller]")]
-public class PartsController : ControllerBase
+public class PartsDictionaryController : ControllerBase
 {
-    private readonly ILogger<PartsController> _logger;
+    private readonly ILogger<PartsDictionaryController> _logger;
     
     private readonly INaprawyDbStorage _dbStorage;
 
-    public PartsController(ILogger<PartsController> logger, INaprawyDbStorage dbStorage)
+    public PartsDictionaryController(ILogger<PartsDictionaryController> logger, INaprawyDbStorage dbStorage)
     {
         _logger = logger;
         _dbStorage = dbStorage;        

@@ -1,0 +1,28 @@
+<p>maintenances-details works!</p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="detailsList">
+    <thead>
+      <tr>
+        <th>Lp</th>
+        <th>Czynność</th>
+        <th>Nazwa części</th>        
+        <th>Cena jedn.</th>
+        <th>Ilość</th>
+        <th>Koszt</th>
+        <th>Opis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let maintenance of detailsList; index as i">
+        <td>{{i+1}}</td>
+        <td>{{maintenance.maintenanceName}}</td>        
+        <td>{{maintenance.partName}}</td>
+        <td>{{maintenance.price | currency:'PLN'}}</td>
+        <td>{{maintenance.quantity}}</td>
+        <td>{{maintenance.cost | currency:'PLN'}}</td>
+        <td>{{maintenance.description}}</td>
+        <!-- <td><button class="btn btn-primary" (click)="onMaintenanceSelect(maintenance)">Pokaż</button></td>
+        <td><button class="btn btn-primary" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td> -->
+      </tr>
+    </tbody>
+  </table>

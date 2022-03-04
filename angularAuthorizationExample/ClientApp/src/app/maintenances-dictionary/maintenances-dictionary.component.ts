@@ -11,7 +11,7 @@ export class MaintenancesDictionaryComponent implements OnInit {
 
   public czynnosciArray: CzynnosciDictionaryAngularModel[] = [];
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<CzynnosciDictionaryAngularModel[]>(baseUrl + 'Maintenances').subscribe(result => {
+    http.get<CzynnosciDictionaryAngularModel[]>(baseUrl + 'MaintenancesDictionary').subscribe(result => {
       this.czynnosciArray = result;
     }, error => console.error(error));
     console.log("Adres do kontrollera: "+baseUrl);

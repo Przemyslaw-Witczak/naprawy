@@ -1,0 +1,51 @@
+<div *ngIf="!selectedVehicle">
+    <button class="btn btn-primary" (click)="selectVehicle()">Wybierz pojazd</button>
+</div>
+
+<table>
+    <tr>        
+        <td><button class="btn btn-primary" (click)="selectVehicle()">Zmień</button></td>
+        <td><h3 >Pojazd: {{selectedVehicle?.brand}} {{selectedVehicle?.type}} {{selectedVehicle?.registrationNumber}}</h3></td>
+    </tr>
+</table>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="!selectedVehicle">
+    <thead>
+        <tr>        
+            <th>Marka</th>
+            <th>Model</th>        
+            <th>Numer rejestracyjny</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let vehicle of vehiclesList" (click)="onVehicleSelect(vehicle)">        
+            <td>{{vehicle.brand}}</td>
+            <td>{{vehicle.type}}</td>
+            <td>{{vehicle.registrationNumber}}</td>
+            <td><button class="btn btn-primary" (click)="onVehicleSelect(vehicle)">Wybierz</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
+    <thead>
+      <tr>
+        <th>Lp</th>
+        <th>Data</th>
+        <th>Stan licznika</th>        
+        <th>Opis</th>
+        <th>Koszt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let maintenance of maintenancesList; index as i" (click)="onMaintenanceSelect(maintenance)" [class.selected]="isMaintenanceSelected(maintenance)">
+        <td>{{i+1}}</td>
+        <td>{{maintenance.maintenanceDate | date:'YYYY-MM-dd'}}</td>        
+        <td>{{maintenance.mileage}}</td>
+        <td>{{maintenance.description}} {{maintenance.errorMessage}}</td>
+        <td>{{maintenance.cost | currency:'PLN'}}</td>
+        <td><button class="btn btn-primary" (click)="onMaintenanceSelect(maintenance)">Pokaż</button></td>
+        <td><button class="btn btn-primary" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td>
+      </tr>
+    </tbody>
+  </table>

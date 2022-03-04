@@ -10,7 +10,7 @@ export class CzesciDictionaryComponent implements OnInit {
 
   public czesciArray: CzesciDictionaryAngularModel[] = [];
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<CzesciDictionaryAngularModel[]>(baseUrl + 'Parts').subscribe(result => {
+    http.get<CzesciDictionaryAngularModel[]>(baseUrl + 'PartsDictionary').subscribe(result => {
       this.czesciArray = result;
     }, error => console.error(error));
     console.log("Adres do kontrollera: "+baseUrl);

@@ -13,6 +13,8 @@ public class NaprawyDbStorage : INaprawyDbStorage
     {
         _connectionString = connectionString;
     }
+
+    #region Dictionaries
     public List<DictionaryItem> GetAllMaintenancesDictionary()    
     {
         var dictionaryValues = new List<DictionaryItem>();
@@ -55,7 +57,9 @@ public class NaprawyDbStorage : INaprawyDbStorage
         }
         return dictionaryValues;
     }
+    #endregion
 
+    #region Vehicles
     public Task<List<VehicleModel>> GetAllVehicles()
     {
         Task<List<VehicleModel>> getAllVehiclesTask = Task.Factory.StartNew(() => {
@@ -195,7 +199,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
         
     }
 
-    public Task<string> DeleteVehicle(int vehicleId)
+    public Task<string> DeleteVehicle(int vehicleId)    
     {
         Task<string> deleteTask = Task.Factory.StartNew(() =>
         {
@@ -213,4 +217,95 @@ public class NaprawyDbStorage : INaprawyDbStorage
         });
         return deleteTask;
     }
+
+    
+
+    #endregion
+
+    #region Maintenances
+    public Task<List<MaintenanceModel>> GetAllMaintenances(int VehicleId)
+    {
+        Task<List<MaintenanceModel>> getAllMaintenancesTask = Task.Factory.StartNew(() => {
+            var maintenances = new List<MaintenanceModel>();
+            using (var context = new FbCoreClient(_connectionString))
+            {
+                context.AddSQL(@"select * from POKAZ_NAPRAWY(:id_pozycji, :id_pojazdu, :data_od, :data_do, :przebieg, :licznik_od, :licznik_do, :tankowania)");
+                context.SetNull("id_pozycji");
+                context.ParamByName("id_pojazdu", FbDbType.Integer).Value = VehicleId;
+                context.SetNull("data_od");
+                context.SetNull("data_do");
+                context.SetNull("przebieg");
+                context.SetNull("licznik_od");
+                context.SetNull("licznik_do");
+                context.SetNull("tankowania");
+
+                context.Execute();
+                while(context.Read())
+                {
+                    var vehicle = new MaintenanceModel()
+                    {
+                        Id = context.GetInt32("id_main"),
+                        MaintenanceDate = context.GetDateTime("data"),
+                        Mileage = context.GetInt32("przebieg"),
+                        Description = context.GetString("opis"),
+                        Cost = context.GetDecimal("koszt"),
+                        Distance = context.GetInt32("przejechano")
+                    };
+                    maintenances.Add(vehicle);
+                }
+                return maintenances;
+            }
+        });
+        return getAllMaintenancesTask;
+    }
+
+    public Task<MaintenanceModel> GetMaintenanceById(int maintenanceId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<MaintenanceDetailsModel>> GetMaintenanceDetails(int maintenanceId)
+    {
+        Task<List<MaintenanceDetailsModel>> getMaintenanceDetailsTask = Task.Factory.StartNew(() => {
+            var details = new List<MaintenanceDetailsModel>();
+            using (var context = new FbCoreClient(_connectionString))
+            {
+                context.AddSQL(@"select * from POKAZ_SZCZEGOLY_NAPRAWY(:id_main, :tankowania)");
+                
+                context.ParamByName("id_main", FbDbType.Integer).Value = maintenanceId;
+                context.SetNull("tankowania");
+
+                context.Execute();
+                while(context.Read())
+                {
+                    var detail = new MaintenanceDetailsModel()
+                    {
+                        IdMaintenance = maintenanceId,
+                        IdMaintenanceDetails = context.GetInt32("id_pozycji"),
+                        PartName = context.GetString("czesc"),
+                        MaintenanceName = context.GetString("czynnosc"),
+                        Description = context.GetString("opis"),
+                        Quantity = context.GetInt32("ilosc"),
+                        Price = context.GetDecimal("cena_jedn"),
+                        Cost = context.GetDecimal("koszt")
+                    };
+                    details.Add(detail);
+                }
+                return details;
+            }
+        });
+        return getMaintenanceDetailsTask;
+    }
+
+    public Task CreateOrUpdateMaintenance(MaintenanceModel maintenance)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> DeleteMaintenance(int maintenanceId)
+    {
+        throw new NotImplementedException();
+    }
+   
+    #endregion
 }

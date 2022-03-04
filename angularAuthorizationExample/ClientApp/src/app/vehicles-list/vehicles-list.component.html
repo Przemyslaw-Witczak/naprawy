@@ -6,6 +6,7 @@
 <button class="btn btn-primary" (click)="onCreate()">Dodaj nowy pojazd</button>
 <app-vehicle-details [parentData]="selectedVehicle"></app-vehicle-details>
 <hr>
+
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
   <thead>
     <tr>
@@ -26,3 +27,4 @@
     </tr>
   </tbody>
 </table>
+  
