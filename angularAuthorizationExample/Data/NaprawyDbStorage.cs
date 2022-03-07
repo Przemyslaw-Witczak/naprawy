@@ -244,6 +244,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                 {
                     var vehicle = new MaintenanceModel()
                     {
+                        IdVehicle = VehicleId,
                         Id = context.GetInt32("id_main"),
                         MaintenanceDate = context.GetDateTime("data"),
                         Mileage = context.GetInt32("przebieg"),
@@ -261,7 +262,27 @@ public class NaprawyDbStorage : INaprawyDbStorage
 
     public Task<MaintenanceModel> GetMaintenanceById(int maintenanceId)
     {
-        throw new NotImplementedException();
+        Task<MaintenanceModel> getMaintenanceTask = Task.Factory.StartNew(() => {            
+            using (var context = new FbCoreClient(_connectionString))
+            {
+                context.AddSQL(@"select * from ATR_DE_MAIN(:id_pozycji)");
+                context.ParamByName("id_pozycji", FbDbType.Integer).Value = maintenanceId;            
+                context.Execute();
+                MaintenanceModel maintenance = null;
+                while (context.Read())
+                {
+                    maintenance = new MaintenanceModel();                    
+                    maintenance.IdVehicle = context.GetInt32("wy_id_pojazdy");
+                    maintenance.Id = maintenanceId;
+                    maintenance.MaintenanceDate = context.GetDateTime("wy_data");
+                    maintenance.Mileage = context.GetDecimal("wy_przebieg");
+                    maintenance.Description = context.GetString("wy_opis");
+                    maintenance.Cost = context.GetDecimal("wy_koszt");
+                }
+                return maintenance;
+            }
+        });
+        return getMaintenanceTask;
     }
 
     public Task<List<MaintenanceDetailsModel>> GetMaintenanceDetails(int maintenanceId)
@@ -299,12 +320,45 @@ public class NaprawyDbStorage : INaprawyDbStorage
 
     public Task CreateOrUpdateMaintenance(MaintenanceModel maintenance)
     {
-        throw new NotImplementedException();
+        var updateTask = Task.Factory.StartNew(()=>{
+            using(var context = new FbCoreClient(_connectionString))
+            {
+                context.AddSQL("execute procedure DODAJ_EDYTUJ_NAPRAWE(:id_main, :id_pojazdy, :data, :przebieg, :przejechano, :opis)");
+                context.ParamByName("id_pojazdy", FbDbType.Integer).Value = maintenance.IdVehicle;
+                if (maintenance.Id>0)
+                    context.ParamByName("id_main", FbDbType.Integer).Value = maintenance.Id;
+                else
+                    context.SetNull("id_main");
+                context.ParamByName("data", FbDbType.Date).Value = maintenance.MaintenanceDate;
+                context.ParamByName("przebieg", FbDbType.Integer).Value = maintenance.Mileage;
+                context.SetNull("przejechano");
+                if (string.IsNullOrEmpty(maintenance.Description))
+                    context.SetNull("opis");
+                else
+                    context.ParamByName("opis", FbDbType.VarChar).Value = maintenance.Description;
+                context.ExecuteNonQuery();
+            }
+        });
+        return updateTask;
     }
 
     public Task<string> DeleteMaintenance(int maintenanceId)
     {
-        throw new NotImplementedException();
+        Task<string> deleteTask = Task.Factory.StartNew(() =>
+        {
+            using(var context = new FbCoreClient(_connectionString))
+            {
+                context.AddSQL("select komunikat from USUN_NAPRAWE(:ID_MAIN)");
+                context.ParamByName("ID_MAIN", FbDbType.Integer).Value = maintenanceId;
+                context.Execute();
+                if (context.Read())
+                {
+                    return $"Nie można usunąć pozycji, ponieważ istnieją skojarzone z nią {context.GetString("komunikat")}";
+                }
+                return string.Empty;
+            }
+        });
+        return deleteTask;
     }
    
     #endregion

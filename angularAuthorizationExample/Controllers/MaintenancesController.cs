@@ -35,5 +35,29 @@ namespace angularAuthorizationExample.Controllers
             }                   
         }
 
+        [HttpDelete("{maintenanceId:int}")]
+        public async Task<ActionResult<string>> DeleteMaintenance(int maintenanceId)
+        {
+            try
+            {
+                if (maintenanceId<1)
+                    return BadRequest();
+                // var employeeToDelete = await employeeRepository.GetEmployee(id);
+
+                var message = await _dbStorage.DeleteMaintenance(maintenanceId);
+                if (!string.IsNullOrEmpty(message))                
+                {                     
+                    ModelState.AddModelError("komunikat", message);
+                    return StatusCode(StatusCodes.Status403Forbidden, ModelState);
+                }
+
+                return Ok(message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error deleting maintenance id={maintenanceId}");
+            }
+        }
     }
 }

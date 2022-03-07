@@ -1,3 +1,5 @@
+import { IMaintenanceDetailsAngularModel } from "./MaintenanceDetailsAngularModel";
+
 export interface IMaintenanceAngularModel {
     id: number;
     maintenanceDate: Date;
@@ -6,6 +8,7 @@ export interface IMaintenanceAngularModel {
     cost: number;
     description: string;
     errorMessage: string;
+    maintenanceDetailsList: IMaintenanceDetailsAngularModel[];
   }
   
   

@@ -101,7 +101,7 @@ namespace angularAuthorizationExample.Controllers
         }
 
         [HttpDelete("{vehicleId:int}")]
-        public async Task<ActionResult<string>> DeleteEmployee(int vehicleId)
+        public async Task<ActionResult<string>> DeleteVehicle(int vehicleId)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace angularAuthorizationExample.Controllers
                     return StatusCode(StatusCodes.Status403Forbidden, ModelState);
                 }
 
-                return await _dbStorage.DeleteVehicle(vehicleId);
+                return Ok(message);                
             }
             catch (Exception)
             {

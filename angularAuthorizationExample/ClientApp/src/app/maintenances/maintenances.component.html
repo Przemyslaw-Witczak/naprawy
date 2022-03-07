@@ -39,11 +39,12 @@
 
 
 <!-- Lista czynności - historia przebiegu pojazdu -->
-<div *ngIf="selectedVehicle && !selectedMaintenance">
+<div *ngIf="selectedVehicle && !selectedMaintenance && maintenancesList.length>0">
   <h3>Podsumowanie</h3>    
   <table>    
     <tr><th>Przejechano:</th><td>{{maintenancesList[maintenancesList.length-1].distance}} [km]</td></tr>
-    <tr><th>Koszt:</th><td>{{getSummaryCost() | currency:'PLN'}}</td></tr>      
+    <tr><th>Koszt:</th><td>{{getSummaryCost() | currency:'PLN'}}</td></tr>  
+        
   </table>
   <h2>Historia</h2>  
   <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
@@ -78,10 +79,15 @@
     <tr><th>Data:</th><td>{{selectedMaintenance.maintenanceDate | date:'YYYY-MM-dd'}}</td></tr>
     <tr><th>Stan licznika:</th><td>{{selectedMaintenance.mileage}} [km]</td></tr>
     <tr><th>Koszt:</th><td>{{selectedMaintenance.cost | currency:'PLN'}}</td></tr>
-    <tr><th>Opis:</th><td>{{selectedMaintenance.description}}</td></tr>
-
+    <tr><th>Opis:</th><td>{{selectedMaintenance.description}}</td></tr>    
   </table>
-  <button class="btn btn-primary" (click)="unselectMaintenance()">Wróć</button>
+  <table>
+    <tr>
+      <td><button class="btn btn-primary" (click)="unselectMaintenance()">Wróć</button></td>
+      <td><button (click)="onEditMaintenance(selectedMaintenance)" class="btn btn-primary">Edytuj</button></td>
+    </tr>
+  </table>
+  
   
   <app-maintenances-details [parentMaintenanceId]="selectedMaintenance.id"></app-maintenances-details>
     
