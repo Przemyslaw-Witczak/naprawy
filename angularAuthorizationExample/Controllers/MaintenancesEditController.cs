@@ -29,7 +29,7 @@ namespace angularAuthorizationExample.Controllers
                 Task<MaintenanceModel> maintenanceToReturn;
                 maintenanceToReturn = Task.Factory.StartNew(()=>
                 {
-                    MaintenanceModel maintenanceModel = null;
+                    MaintenanceModel maintenanceModel;
                     if (maintenanceId>0)
                     {
                         maintenanceModel =  _dbStorage.GetMaintenanceById(maintenanceId).Result;

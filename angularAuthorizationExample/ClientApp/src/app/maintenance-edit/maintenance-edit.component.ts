@@ -18,6 +18,7 @@ export class MaintenanceEditComponent implements OnInit {
   public maintenance: IMaintenanceAngularModel | null = null;
   public errorMsg = '';
   public submitted: boolean = false;
+  public hideMaintenance: boolean = false;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -62,7 +63,6 @@ export class MaintenanceEditComponent implements OnInit {
 
   goBack()
   {
-    //this.router.navigate(['/Maintenances', {vehicleId: this.vehicleId, maintenanceId: this.maintenanceId}]); 
     console.log("Navigate back to: Maintenances: VehicleId="+this.vehicleId+" MaintenanceId="+this.maintenanceId);
     this.router.navigate(['/maintenances', this.vehicleId, this.maintenanceId]);
   }

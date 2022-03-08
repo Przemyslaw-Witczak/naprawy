@@ -9,6 +9,6 @@ namespace angularAuthorizationExample.Models
         public string? Description{get; set;}
         public decimal Cost{get; set;}
         public int Distance { get; set; }
-        public List<MaintenanceDetailsModel>MaintenanceDetailsList{get; set;}
+        public List<MaintenanceDetailsModel>?MaintenanceDetailsList{get; set;}
     }
 }

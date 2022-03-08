@@ -65,7 +65,8 @@
             <input type="date" [disabled]="!soldDateIsChecked" #soldDate="ngModel" class="form-control" [ngModel]="vehicle.soldDate | date:'yyyy-MM-dd'" (ngModelChange)="vehicle.soldDate=$event" name="soldDate">            
         </div>
 
-<div>
-    <button (click)="gotoVehiclesList()" class="btn btn-primary">Powrót</button>
-    <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Submit form</button>
-</div>
+    <div>
+        <button (click)="gotoVehiclesList()" class="btn btn-primary">Powrót</button>
+        <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>
+    </div>
+</form>

@@ -78,8 +78,7 @@ export class VehiclesListComponent implements OnInit {
             //delete this.vehiclesList[this.vehiclesList.indexOf(vehicle)]; //this deletes element and sets it to undefined
             this.vehiclesList.splice(this.vehiclesList.indexOf(vehicle),1);
           }, error => {
-            console.error('Error!', error);
-            
+            console.error('Error!', error);            
             vehicle.displayErrorLine = error.error.komunikat.errors[0].errorMessage;
             //this.errorMsg = error.message+error.error;
           });

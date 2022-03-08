@@ -26,7 +26,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
             {
                 var dictionaryItem = new DictionaryItem()
                 {
-                    Identity = context.GetInt32("id"),
+                    Id = context.GetInt32("id"),
                     Name = context.GetString("opis"),
                     InActive = context.IsDBNull("nieaktywny") ? false : true
                 };
@@ -47,7 +47,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
             {
                 var dictionaryItem = new PartDictionaryItem()
                 {
-                    Identity = context.GetInt32("id"),
+                    Id = context.GetInt32("id"),
                     Name = context.GetString("nazwa"),
                     InActive = context.IsDBNull("nieaktywny") ? false : true,
                     IsFuel = context.IsDBNull("paliwo") ? false : true,
@@ -268,10 +268,9 @@ public class NaprawyDbStorage : INaprawyDbStorage
                 context.AddSQL(@"select * from ATR_DE_MAIN(:id_pozycji)");
                 context.ParamByName("id_pozycji", FbDbType.Integer).Value = maintenanceId;            
                 context.Execute();
-                MaintenanceModel maintenance = null;
+                MaintenanceModel maintenance = new MaintenanceModel();
                 while (context.Read())
-                {
-                    maintenance = new MaintenanceModel();                    
+                {                                    
                     maintenance.IdVehicle = context.GetInt32("wy_id_pojazdy");
                     maintenance.Id = maintenanceId;
                     maintenance.MaintenanceDate = context.GetDateTime("wy_data");
@@ -299,12 +298,27 @@ public class NaprawyDbStorage : INaprawyDbStorage
                 context.Execute();
                 while(context.Read())
                 {
+                    DictionaryItem? part = null;
+                    if (!context.IsDBNull("id_czesci"))
+                        part = new DictionaryItem()
+                        {
+                            Id = context.GetInt32("id_czesci"),
+                            Name = context.GetString("czesc")
+                        };
+                    DictionaryItem? maintenance = null;
+                    if (!context.IsDBNull("id_czynnosci"))
+                        maintenance = new DictionaryItem()
+                        {
+                            Id = context.GetInt32("id_czynnosci"),
+                            Name = context.GetString("czynnosc")
+                        };
+
                     var detail = new MaintenanceDetailsModel()
                     {
                         IdMaintenance = maintenanceId,
                         IdMaintenanceDetails = context.GetInt32("id_pozycji"),
-                        PartName = context.GetString("czesc"),
-                        MaintenanceName = context.GetString("czynnosc"),
+                        Part = part,
+                        Maintenance = maintenance,                    
                         Description = context.GetString("opis"),
                         Quantity = context.GetInt32("ilosc"),
                         Price = context.GetDecimal("cena_jedn"),

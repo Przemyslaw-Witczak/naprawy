@@ -1,4 +1,5 @@
 using angularAuthorizationExample.Abstract;
+using angularAuthorizationExample.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace angularAuthorizationExample.Controllers
@@ -25,7 +26,17 @@ namespace angularAuthorizationExample.Controllers
             
             try
             {
-                return Ok(await _dbStorage.GetMaintenanceDetails(maintenanceId));
+                if (maintenanceId>0)
+                    return Ok(await _dbStorage.GetMaintenanceDetails(maintenanceId));
+                else
+                {
+                    Task<List<MaintenanceDetailsModel>> detailsModels = Task.Factory.StartNew(()=>
+                    {
+                        var detailsList = new List<MaintenanceDetailsModel>();
+                        return detailsList;                        
+                    });
+                    return Ok(await detailsModels);
+                }
 
             }
             catch(Exception ex)

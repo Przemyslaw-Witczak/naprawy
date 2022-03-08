@@ -7,7 +7,7 @@
     {{errorMsg}}
 </div>
 
-<div *ngIf="maintenance != null">
+<div *ngIf="maintenance != null && !hideMaintenance">
     <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
 
         <div class="form-group">
@@ -25,10 +25,12 @@
         <div class="form-group">
             <label>Opis:</label>
             <input type="text" #description="ngModel" [class.is-invalid]="description.invalid && description.touched" class="form-control" [(ngModel)]="maintenance.description" name="description">            
-        </div>
-                
-
+        </div>                
 <div>
     <button (click)="goBack()" class="btn btn-primary">Powrót</button>
     <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>
 </div>
+ 
+<div *ngIf="maintenance!=null">
+    <app-maintenances-details [parentMaintenanceId]="maintenance.id" [editingMode]="true"></app-maintenances-details>
+</div> 

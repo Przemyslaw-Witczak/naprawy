@@ -1,5 +1,6 @@
 export interface CzynnosciDictionaryAngularModel {
-  name: string;
+  id: number;
+  name: string;  
   inActive: boolean;
   inActiveString: string;
 }

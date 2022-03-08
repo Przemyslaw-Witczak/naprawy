@@ -2,7 +2,7 @@ namespace angularAuthorizationExample.Models;
 
 public class DictionaryItem
 {
-    public int Identity { get; set; }
+    public int Id { get; set; }
 
     public string? Name { get; set; }
 

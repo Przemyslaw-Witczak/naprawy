@@ -89,6 +89,10 @@
   </table>
   
   
-  <app-maintenances-details [parentMaintenanceId]="selectedMaintenance.id"></app-maintenances-details>
+
+<div *ngIf="selectedMaintenance">
+  <app-maintenances-details [parentMaintenanceId]="selectedMaintenance.id" [editingMode]="false"></app-maintenances-details>
+</div>
+
     
 </div>

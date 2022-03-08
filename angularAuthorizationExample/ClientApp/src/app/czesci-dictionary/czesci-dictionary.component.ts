@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { CzesciDictionaryAngularModel } from './CzesciDictionaryAngularModel';
 
 @Component({
   selector: 'app-czesci-dictionary',
@@ -21,8 +22,3 @@ export class CzesciDictionaryComponent implements OnInit {
 
 }
 
-interface CzesciDictionaryAngularModel {
-  name: string;
-  inActive: boolean;
-  isFuel: boolean;  
-}

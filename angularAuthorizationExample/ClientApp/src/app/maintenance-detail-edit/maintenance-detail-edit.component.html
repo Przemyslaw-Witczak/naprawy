@@ -1,0 +1,40 @@
+<p>maintenance-detail-edit works!</p>
+<p>{{maintenancePosition | json}}</p>
+
+<!-- <p>{{partsDictionary | json}}</p>
+<p>{{maintenancesDictionary | json}}</p> -->
+
+<div *ngIf="maintenancePosition">
+    <p>2Do</p>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- <div class="form-group">
+            <label>Data:</label>
+                        
+            <input type="date" #maintenanceDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenance.maintenanceDate | date:'yyyy-MM-dd'" name="maintenanceDate" >            
+        </div>
+
+        <div class="form-group">
+            <label>Przebieg:</label>
+            <input type="text" required #mileage="ngModel" [class.is-invalid]="mileage.invalid && mileage.touched" class="form-control" [(ngModel)]="maintenance.mileage" name="mileage">
+            <small class="text-danger" [class.d-none]="mileage.valid || mileage.untouched">Przebieg jest wymagany</small>
+        </div>  -->
+
+        <!-- <select
+          class="custom-select mb-3"
+          (change)="changeMaintenance($event)"
+          formControlName="cityName"
+        >
+          <option value="">Czynność</option>
+          <option *ngFor="let maintenance of maintenancesDictionary" [ngValue]="maintenance">
+            {{ maintenance.name }}
+          </option>
+        </select>
+        
+        <div class="form-group">
+            <label>Opis:</label>
+            <input type="text" #description="ngModel" [class.is-invalid]="description.invalid && description.touched" class="form-control" [(ngModel)]="maintenancePosition.description" name="description">            
+        </div>                 -->
+<div>    
+    <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>
+</div>
