@@ -98,6 +98,11 @@ export class MaintenancesComponent implements OnInit {
     this.router.navigate(['/maintenance-edit', this.selectedVehicle?.id, maintenance.id])
   }
 
+  onAddMaintenance()
+  {
+    this.router.navigate(['/maintenance-edit', this.selectedVehicle?.id, 0]);
+  }
+
   getSummaryCost(): number
   {
     let summaryCost = 0;
@@ -130,6 +135,7 @@ export class MaintenancesComponent implements OnInit {
             console.log("Maintenance id"+maintenance.id);
             //delete this.vehiclesList[this.vehiclesList.indexOf(vehicle)]; //this deletes element and sets it to undefined
             this.maintenancesList.splice(this.maintenancesList.indexOf(maintenance),1);
+            this.unselectMaintenance();
           }, error => {
             console.error('Error!', error);
             

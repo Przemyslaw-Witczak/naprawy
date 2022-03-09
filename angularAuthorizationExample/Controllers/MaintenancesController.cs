@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using angularAuthorizationExample.Abstract;
+using angularAuthorizationExample.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace angularAuthorizationExample.Controllers
@@ -57,6 +59,27 @@ namespace angularAuthorizationExample.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error deleting maintenance id={maintenanceId}");
+            }
+        }
+    
+        [HttpPost]
+        public async Task<ActionResult<MaintenanceModel>> SaveMaintenance([FromBody]MaintenanceModel maintenance)
+        {
+            Debug.WriteLine($"Changed maintenance {maintenance?.ToString()}");
+            _logger.LogDebug($"Saving maintenance. {maintenance?.ToString()}");
+            try
+            {          
+                if (maintenance==null)
+                    return BadRequest();
+                await _dbStorage.CreateOrUpdateMaintenance(maintenance);
+               
+                return CreatedAtAction(nameof(SaveMaintenance), new {id=maintenance.Id}, maintenance);
+            }
+            catch(Exception ex)
+            {
+                var errorMessage = $"Error saving changes to Maintenance={maintenance?.ToString()}.";
+                _logger.LogError(errorMessage, ex);
+                return StatusCode(StatusCodes.Status405MethodNotAllowed, errorMessage);
             }
         }
     }

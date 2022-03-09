@@ -7,7 +7,7 @@
 <app-vehicle-details [parentData]="selectedVehicle"></app-vehicle-details>
 <hr>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="vehiclesList">
+<table class='table table-striped  table-sm table-hover' aria-labelledby="tableLabel" *ngIf="vehiclesList">
   <thead>
     <tr>
       <th></th>
@@ -22,8 +22,8 @@
       <td>{{ vehicle.brand}}</td>
       <td>{{ vehicle.type}}</td>
       <td>{{ vehicle.registrationNumber}}</td>
-      <td><button class="btn btn-primary" (click)="onEdit(vehicle)">Edytuj</button></td>
-      <td><button class="btn btn-primary" (click)="onDelete(vehicle)">Usuń</button></td>
+      <td><button class="btn btn-primary btn-sm" (click)="onEdit(vehicle)">Edytuj</button></td>
+      <td><button class="btn btn-primary btn-sm" (click)="onDelete(vehicle)">Usuń</button></td>
     </tr>
   </tbody>
 </table>

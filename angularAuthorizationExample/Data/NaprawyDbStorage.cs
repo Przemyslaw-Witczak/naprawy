@@ -337,7 +337,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
         var updateTask = Task.Factory.StartNew(()=>{
             using(var context = new FbCoreClient(_connectionString))
             {
-                context.AddSQL("execute procedure DODAJ_EDYTUJ_NAPRAWE(:id_main, :id_pojazdy, :data, :przebieg, :przejechano, :opis)");
+                context.AddSQL("select new_id from DODAJ_EDYTUJ_NAPRAWE(:id_main, :id_pojazdy, :data, :przebieg, :przejechano, :opis)");
                 context.ParamByName("id_pojazdy", FbDbType.Integer).Value = maintenance.IdVehicle;
                 if (maintenance.Id>0)
                     context.ParamByName("id_main", FbDbType.Integer).Value = maintenance.Id;
@@ -350,8 +350,65 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     context.SetNull("opis");
                 else
                     context.ParamByName("opis", FbDbType.VarChar).Value = maintenance.Description;
-                context.ExecuteNonQuery();
+                context.Execute();
+                if (context.Read() && !context.IsDBNull("new_id"))
+                    maintenance.Id = context.GetInt32("new_id");
             }
+
+            var positionsToDelete = maintenance.MaintenanceDetailsList?.Find(x=>x.Delted);
+            var positionsToUpdate = maintenance.MaintenanceDetailsList?.Find(x=>!x.Delted);
+            //delete positions marked as deleted
+            if (positionsToDelete!=null)
+            {
+                foreach(var detail in positionsToDelete)
+                {
+                    using (var childContext = new FbCoreClient(_connectionString))
+                    {
+                        childContext.AddSQL("delete from naprawy n where n.id = :id_naprawy");
+                        childContext.ParamByName("id_naprawy", FbDbType.Integer).Value = detail.
+                    }
+                }
+            }
+            //save updated positions..
+            
+            if (positionsToUpdate!=null)
+            {
+                foreach(var detail in positionsToUpdate)
+                {
+                    using (var childContext = new FbCoreClient(_connectionString))
+                    {
+                        childContext.AddSQL("execute procedure DODAJ_EDYTUJ_POZYCJE_NAPRAWY(:id_naprawy, :id_main, :id_czesci, :id_czynnosci, :ilosc, :cena, :koszt, :opis)");
+                        childContext.ParamByName("id_main", FbDbType.Integer).Value = maintenance.Id;
+                        if (detail.IdMaintenanceDetails!=0)
+                            childContext.ParamByName("id_naprawy", FbDbType.Integer).Value = detail.IdMaintenanceDetails;
+                        else
+                            childContext.SetNull("id_naprawy");
+                        
+                        if (detail.Maintenance!=null)
+                            childContext.ParamByName("id_czynnosci", FbDbType.Integer).Value = detail.Maintenance.Id;
+                        else
+                            childContext.SetNull("id_czynnosci");
+
+                        if (detail.Part!=null)
+                            childContext.ParamByName("id_czesci", FbDbType.Integer).Value = detail.Part.Id;
+                        else
+                            childContext.SetNull("id_czesci");
+
+                        childContext.ParamByName("ilosc", FbDbType.Decimal).Value = detail.Quantity;
+                        childContext.ParamByName("cena", FbDbType.Decimal).Value = detail.Price;
+                        childContext.ParamByName("koszt", FbDbType.Decimal).Value = detail.Cost;
+                        if (string.IsNullOrEmpty(detail.Description))
+                            childContext.SetNull("opis");
+                        else
+                        
+                            childContext.ParamByName("opis", FbDbType.VarChar).Value = detail.Description;
+                        childContext.ExecuteNonQuery();
+
+                    }
+            
+                }
+            }
+
         });
         return updateTask;
     }
@@ -365,7 +422,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                 context.AddSQL("select komunikat from USUN_NAPRAWE(:ID_MAIN)");
                 context.ParamByName("ID_MAIN", FbDbType.Integer).Value = maintenanceId;
                 context.Execute();
-                if (context.Read())
+                if (context.Read() && !context.IsDBNull("komunikat"))
                 {
                     return $"Nie można usunąć pozycji, ponieważ istnieją skojarzone z nią {context.GetString("komunikat")}";
                 }

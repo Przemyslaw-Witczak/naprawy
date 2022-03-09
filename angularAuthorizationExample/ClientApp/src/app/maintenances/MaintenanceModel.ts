@@ -2,6 +2,7 @@ import { IMaintenanceDetailsAngularModel } from "./MaintenanceDetailsAngularMode
 
 export interface IMaintenanceAngularModel {
     id: number;
+    idVehicle: number;
     maintenanceDate: Date;
     mileage: number;
     distance: number;

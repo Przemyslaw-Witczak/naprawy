@@ -3,7 +3,7 @@
 
 <!-- <p>{{partsDictionary | json}}</p>
 <p>{{maintenancesDictionary | json}}</p> -->
-
+<p>Maintenance-detail-edit</p>
 <div *ngIf="maintenancePosition">
     
     <h4 *ngIf="!maintenancePosition.idMaintenanceDetails">Dodanie pozycji</h4>
@@ -50,8 +50,10 @@
 
         <div class="form-group">
           <label>Opis:</label>
-          <input type="text" #description="ngModel" class="form-control" [(ngModel)]="maintenancePosition.description" name="description">            
+          <!-- <input type="text" #description="ngModel" class="form-control" [(ngModel)]="maintenancePosition.description" name="description">             -->
+          <textarea class="form-control" #description="ngModel" class="form-control" [(ngModel)]="maintenancePosition.description" name="description" rows="3"></textarea>
         </div>                 
 <div>    
-    <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>
+    <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>    
+    <button class="btn btn-primary" (click)="goBack()">Anuluj</button>
 </div>

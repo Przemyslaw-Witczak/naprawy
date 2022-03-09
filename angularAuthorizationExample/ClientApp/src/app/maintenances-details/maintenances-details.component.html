@@ -1,6 +1,7 @@
+<p>Maintenances-details EditingModel={{editingMode}}</p>
 <div *ngIf="!selectedMaintenancePosition">
-  <button *ngIf="editingMode" class="btn btn-primary" (click)="onMaintenanceCreate()">Dodaj pozycję</button>
-  <small *ngIf="madeChanges" class="text-danger">Zapisz zmiany!</small>
+  <button *ngIf="editingMode" class="btn btn-primary btn-block" (click)="onMaintenanceCreate()">Dodaj pozycję</button>
+  <small *ngIf="changesNeedSave" class="text-danger">Zapisz zmiany!</small>
   <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="detailsList">
       <thead>
         <tr>
@@ -24,16 +25,16 @@
           <td>{{maintenance.quantity}}</td>
           <td>{{maintenance.cost | currency:'PLN'}}</td>
           <td>{{maintenance.description}}</td>
-          <td *ngIf="editingMode"><button class="btn btn-primary" (click)="onMaintenanceEdit(maintenance)">Edytuj</button></td>
-          <td *ngIf="editingMode"><button class="btn btn-primary" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td>
+          <td *ngIf="editingMode"><button class="btn btn-primary btn-sm" (click)="onMaintenanceEdit(maintenance)">Edytuj</button></td>
+          <td *ngIf="editingMode"><button class="btn btn-primary btn-sm" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td>
         </tr>
       </tbody>
     </table>
-    <small *ngIf="madeChanges" class="text-danger">Zapisz zmiany!</small>
+    <small *ngIf="changesNeedSave" class="text-danger">Zapisz zmiany!</small>
     <p>id_main={{parentMaintenanceId}}</p>
 </div>
 
 <div *ngIf="selectedMaintenancePosition">
-  <app-maintenance-detail-edit [editedMaintenancePosition]="selectedMaintenancePosition"></app-maintenance-detail-edit>
-  <button (click)="onMaintenanceCancelEdit()" class="btn btn-primary">Anuluj</button>
+  <app-maintenance-detail-edit [editedMaintenancePosition]="selectedMaintenancePosition" (onSave)="onPositionSave($event)"></app-maintenance-detail-edit>
+  <!-- <button (click)="onMaintenanceCancelEdit()" class="btn btn-primary">Anuluj</button> -->
 </div>

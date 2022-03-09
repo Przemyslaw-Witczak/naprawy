@@ -11,11 +11,8 @@ import { IMaintenanceDetailsAngularModel } from '../maintenances/MaintenanceDeta
 })
 export class MaintenanceDetailEditComponent implements OnInit {
   @Input('editedMaintenancePosition') public maintenancePosition : IMaintenanceDetailsAngularModel | null = null;
-  @Output() public childEvent = new EventEmitter();
-  fireEvent()
-  {
-    this.childEvent.emit('Message from component');
-  }
+  @Output() public onSave = new EventEmitter();
+    
   public maintenancesDictionary: CzynnosciDictionaryAngularModel[] = [];  
   public partsDictionary: CzesciDictionaryAngularModel[] = [];
 
@@ -30,22 +27,21 @@ export class MaintenanceDetailEditComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    
+    //ToDo: Creeate copy of edited element
   }
 
   onSubmit()
   {
-    this.maintenancePosition = null;
+    //this.maintenancePosition = null;
+    //ToDo: Sprawdzić, czy element jest zedytowany    
+    this.onSave.emit(true);
   }
-
-  changeMaintenance(event:Event)
-  {
-
-  }
+  
 
   goBack()
   {
-
+    this.maintenancePosition = null;
+    this.onSave.emit(false);
   }
 
   calculateCost()
@@ -53,6 +49,7 @@ export class MaintenanceDetailEditComponent implements OnInit {
     if (this.maintenancePosition)
       this.maintenancePosition.cost = this.maintenancePosition.price * this.maintenancePosition.quantity;
   }
+
 }
 
 
