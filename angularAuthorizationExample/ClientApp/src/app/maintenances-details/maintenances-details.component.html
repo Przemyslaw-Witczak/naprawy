@@ -34,6 +34,6 @@
 </div>
 
 <div *ngIf="selectedMaintenancePosition">
-  <app-maintenance-detail-edit (childEvent)="message=$event" [editedMaintenancePosition]="selectedMaintenancePosition"></app-maintenance-detail-edit>
+  <app-maintenance-detail-edit [editedMaintenancePosition]="selectedMaintenancePosition"></app-maintenance-detail-edit>
   <button (click)="onMaintenanceCancelEdit()" class="btn btn-primary">Anuluj</button>
 </div>

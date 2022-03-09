@@ -3,7 +3,7 @@ import { CzynnosciDictionaryAngularModel } from "../maintenances-dictionary/Czyn
 
 export interface IMaintenanceDetailsAngularModel {
     deleted: boolean;    
-    id: number;
+    idMaintenanceDetails: number;
     idMaintenance: number;
     part: CzesciDictionaryAngularModel;    
     maintenance: CzynnosciDictionaryAngularModel;

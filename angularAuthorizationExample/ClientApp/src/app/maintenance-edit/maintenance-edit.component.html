@@ -18,7 +18,7 @@
 
         <div class="form-group">
             <label>Przebieg:</label>
-            <input type="text" required #mileage="ngModel" [class.is-invalid]="mileage.invalid && mileage.touched" class="form-control" [(ngModel)]="maintenance.mileage" name="mileage">
+            <input type="text" required #mileage="ngModel" [class.is-invalid]="mileage.invalid && mileage.touched" class="form-control" [(ngModel)]="maintenance.mileage" name="mileage" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
             <small class="text-danger" [class.d-none]="mileage.valid || mileage.untouched">Przebieg jest wymagany</small>
         </div> 
         

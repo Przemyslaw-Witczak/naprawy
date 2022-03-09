@@ -1,40 +1,57 @@
-<p>maintenance-detail-edit works!</p>
-<p>{{maintenancePosition | json}}</p>
+<!-- <p>maintenance-detail-edit works!</p>
+<p>{{maintenancePosition | json}}</p> -->
 
 <!-- <p>{{partsDictionary | json}}</p>
 <p>{{maintenancesDictionary | json}}</p> -->
 
 <div *ngIf="maintenancePosition">
-    <p>2Do</p>
+    
+    <h4 *ngIf="!maintenancePosition.idMaintenanceDetails">Dodanie pozycji</h4>
+    <h4 *ngIf="maintenancePosition.idMaintenanceDetails!=null">Edycja pozycji</h4>
     <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
-
-        <!-- <div class="form-group">
-            <label>Data:</label>
-                        
-            <input type="date" #maintenanceDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenance.maintenanceDate | date:'yyyy-MM-dd'" name="maintenanceDate" >            
+        <div class="form-group">
+          <label>Czynność:</label>
+          <select class="form-select mb-3" #maintenance="ngModel" [(ngModel)]="maintenancePosition.maintenance" name="maintenance">
+              <!-- <option value="default">I am interested in</option> -->              
+              <option [ngValue]="maintenancePosition.maintenance">{{maintenancePosition.maintenance?.name}}</option>  
+              <option value="default">{{maintenancePosition.maintenance}}</option>         
+              <option *ngFor="let maintenance of maintenancesDictionary" [ngValue]="maintenance">{{maintenance.name}}</option>
+          </select>    
+          <!-- <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched">Please choose a topic</small>         -->
+        </div>
+        
+        <div class="form-group">
+          <label>Część:</label>
+          <select class="form-select mb-3" #part="ngModel" [(ngModel)]="maintenancePosition.part" name="part">
+              <!-- <option value="default">I am interested in</option> -->     
+              <option [ngValue]="maintenancePosition.part">{{maintenancePosition.part?.name}}</option>         
+              <option *ngFor="let part of partsDictionary" [ngValue]="part">{{part.name}}</option>
+          </select>    
+          <!-- <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched">Please choose a topic</small>         -->
         </div>
 
         <div class="form-group">
-            <label>Przebieg:</label>
-            <input type="text" required #mileage="ngModel" [class.is-invalid]="mileage.invalid && mileage.touched" class="form-control" [(ngModel)]="maintenance.mileage" name="mileage">
-            <small class="text-danger" [class.d-none]="mileage.valid || mileage.untouched">Przebieg jest wymagany</small>
-        </div>  -->
+          <label>Ilość:</label>
+          <input type="text"  required #quantity="ngModel" [class.is-invalid]="quantity.invalid && quantity.touched" class="form-control" [(ngModel)]="maintenancePosition.quantity" name="quantity" (change)="calculateCost()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">            
+          <small class="text-danger" [class.d-none]="cost.valid || cost.untouched">Ilość jest wymagana</small>
+        </div> 
 
-        <!-- <select
-          class="custom-select mb-3"
-          (change)="changeMaintenance($event)"
-          formControlName="cityName"
-        >
-          <option value="">Czynność</option>
-          <option *ngFor="let maintenance of maintenancesDictionary" [ngValue]="maintenance">
-            {{ maintenance.name }}
-          </option>
-        </select>
-        
         <div class="form-group">
-            <label>Opis:</label>
-            <input type="text" #description="ngModel" [class.is-invalid]="description.invalid && description.touched" class="form-control" [(ngModel)]="maintenancePosition.description" name="description">            
-        </div>                 -->
+          <label>Cena jedn.:</label>
+          <input type="text" required #price="ngModel" [class.is-invalid]="price.invalid && price.touched" class="form-control" [(ngModel)]="maintenancePosition.price" name="price" (change)="calculateCost()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">            
+          <small class="text-danger" [class.d-none]="cost.valid || cost.untouched">Cena jednostkowa jest wymagana</small>
+        </div>  
+
+        <div class="form-group">
+          <label>Koszt:</label>
+          <input type="text" disabled required #cost="ngModel" [class.is-invalid]="cost.invalid && cost.touched" class="form-control" [(ngModel)]="maintenancePosition.cost" name="cost">            
+          <small class="text-danger" [class.d-none]="cost.valid || cost.untouched">Koszt jest wymagany</small>
+        </div>                 
+
+        <div class="form-group">
+          <label>Opis:</label>
+          <input type="text" #description="ngModel" class="form-control" [(ngModel)]="maintenancePosition.description" name="description">            
+        </div>                 
 <div>    
     <button [disabled]="userForm.form.invalid" class="btn btn-primary"  type="submit">Zatwierdź</button>
 </div>

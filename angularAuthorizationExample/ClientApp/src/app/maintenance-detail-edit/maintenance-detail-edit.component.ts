@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { CzesciDictionaryAngularModel } from '../czesci-dictionary/CzesciDictionaryAngularModel';
 import { CzynnosciDictionaryAngularModel } from '../maintenances-dictionary/CzynnosciDictionaryAngularModel';
 import { IMaintenanceDetailsAngularModel } from '../maintenances/MaintenanceDetailsAngularModel';
@@ -47,8 +47,12 @@ export class MaintenanceDetailEditComponent implements OnInit {
   {
 
   }
+
+  calculateCost()
+  {
+    if (this.maintenancePosition)
+      this.maintenancePosition.cost = this.maintenancePosition.price * this.maintenancePosition.quantity;
+  }
 }
-function Output() {
-  throw new Error('Function not implemented.');
-}
+
 
