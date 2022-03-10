@@ -3,14 +3,14 @@
     <h3>{{parentData.brand}} {{parentData.type}}</h3>
     
     <table>
-        <tr><th>Id:</th><td>{{parentData.id}}</td></tr>        
+        <!-- <tr><th>Id:</th><td>{{parentData.id}}</td></tr>         -->
         <tr><th>VIN:</th><td>{{parentData.vin}}</td></tr>        
         <tr><th>Rok produkcji:</th><td>{{parentData.productionYear}}</td></tr>
-        <tr><th>Data zakupu:</th><td>{{parentData.purchaseDate | date:'shortDate'}}</td></tr>
-        <tr><th>Data sprzedaży:</th><td>{{ parentData.soldDate | date:'shortDate' }}</td></tr>
-        <tr><th>Pojemność silnika:</th><td>{{parentData.engineCapacity}}</td></tr>
-        <tr><th>Przebieg:</th><td>{{parentData.mileage}}</td></tr>
-        <tr><th>Data aktualizacji przebiegu:</th><td>{{parentData.mileageDate | date:'shortDate'}}</td></tr>                
+        <tr><th>Data zakupu:</th><td>{{parentData.purchaseDate | date:'YYYY-MM-dd'}}</td></tr>
+        <tr><th>Data sprzedaży:</th><td>{{ parentData.soldDate | date:'YYYY-MM-dd' }}</td></tr>
+        <tr><th>Pojemność silnika:</th><td>{{parentData.engineCapacity}} [cm^3]</td></tr>
+        <tr><th>Przebieg:</th><td>{{parentData.mileage}} [km]</td></tr>
+        <tr><th>Data aktualizacji przebiegu:</th><td>{{parentData.mileageDate | date:'YYYY-MM-dd'}}</td></tr>                
     </table>    
     <div *ngIf="parentData.displayErrorLine!=''">
         <h3 class="text-danger">{{parentData.displayErrorLine}}</h3>
