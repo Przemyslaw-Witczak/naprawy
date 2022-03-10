@@ -28,9 +28,15 @@ export class MaintenancesDetailsComponent implements OnInit {
       this.http.get<IMaintenanceDetailsAngularModel[]>(this.baseUrl + 'MaintenancesDetails/'+this.parentMaintenanceId).subscribe(result => {
         this.detailsList = result;  
         this.deletedDetailsList = [];
-        this.onChange.emit(false);
+        this.onChange.emit(null);
       }, error => console.error(error));
     }
+  }
+
+  sendChangesToParrent()
+  {
+    let newArray = this.detailsList.concat(this.deletedDetailsList);
+    this.onChange.emit(newArray);
   }
 
   onMaintenanceCreate()
@@ -40,7 +46,7 @@ export class MaintenancesDetailsComponent implements OnInit {
       idMaintenance: this.parentMaintenanceId
     }
     this.detailsList.push(this.selectedMaintenancePosition);
-    this.onChange.emit(true);
+    this.sendChangesToParrent();
     this.isEditingPositionEvent.emit(true);
   }
 
@@ -50,7 +56,7 @@ export class MaintenancesDetailsComponent implements OnInit {
       maintenanceDetail.deleted = true;            
       this.detailsList.splice(this.detailsList.indexOf(maintenanceDetail),1);
       this.deletedDetailsList.push(maintenanceDetail);
-      this.onChange.emit(true); 
+      this.sendChangesToParrent(); 
       this.changesNeedSave = true;          
       console.log(`Maintenance position deleted ${this.detailsList.length} => ${this.deletedDetailsList.length}!`, maintenanceDetail);
   }
@@ -72,14 +78,12 @@ export class MaintenancesDetailsComponent implements OnInit {
   onPositionSave(value: boolean)
   {
     this.selectedMaintenancePosition = null;
-    this.onChange.emit(value);
+    if (value)
+      this.sendChangesToParrent();
+    else
+      this.onChange.emit(null);
     this.isEditingPositionEvent.emit(false);
     this.changesNeedSave = true;
   }
 
-  // onChanged(value: boolean)
-  // {
-  //   if (value)
-  //     this.changesNeedSave = true;
-  // }
 }

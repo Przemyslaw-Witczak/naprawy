@@ -49,8 +49,7 @@ export class MaintenanceEditComponent implements OnInit {
 
   onSubmit()
   {
-    
-    
+        
     const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
     const body = JSON.stringify(this.maintenance);
     console.log(headers);
@@ -76,9 +75,13 @@ export class MaintenanceEditComponent implements OnInit {
     this.router.navigate(['/maintenances', this.vehicleId, this.maintenanceId]);
   }
 
-  onPositionsChanged(changed: boolean)
+  onPositionsChanged(savedPositions: IMaintenanceDetailsAngularModel[])
   {
-    if (changed)
+    if (savedPositions)
+    {
       this.changedDetails = true;
+      if (this.maintenance)
+        this.maintenance.maintenanceDetailsList = savedPositions;
+    }
   }
 }

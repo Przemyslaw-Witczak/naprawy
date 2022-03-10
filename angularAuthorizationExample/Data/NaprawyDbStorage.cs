@@ -355,8 +355,8 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     maintenance.Id = context.GetInt32("new_id");
             }
 
-            var positionsToDelete = maintenance.MaintenanceDetailsList?.Find(x=>x.Delted);
-            var positionsToUpdate = maintenance.MaintenanceDetailsList?.Find(x=>!x.Delted);
+            var positionsToDelete = maintenance.MaintenanceDetailsList?.FindAll(x=>x.Delted && x.IdMaintenanceDetails>0);
+            var positionsToUpdate = maintenance.MaintenanceDetailsList?.FindAll(x=>!x.Delted);
             //delete positions marked as deleted
             if (positionsToDelete!=null)
             {
@@ -365,12 +365,12 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     using (var childContext = new FbCoreClient(_connectionString))
                     {
                         childContext.AddSQL("delete from naprawy n where n.id = :id_naprawy");
-                        childContext.ParamByName("id_naprawy", FbDbType.Integer).Value = detail.
+                        childContext.ParamByName("id_naprawy", FbDbType.Integer).Value = detail.IdMaintenanceDetails;
+                        childContext.ExecuteNonQuery();
                     }
                 }
             }
-            //save updated positions..
-            
+            //save updated positions..            
             if (positionsToUpdate!=null)
             {
                 foreach(var detail in positionsToUpdate)
@@ -403,7 +403,6 @@ public class NaprawyDbStorage : INaprawyDbStorage
                         
                             childContext.ParamByName("opis", FbDbType.VarChar).Value = detail.Description;
                         childContext.ExecuteNonQuery();
-
                     }
             
                 }
