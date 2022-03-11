@@ -37,7 +37,8 @@ var firebirdConnectionString = builder.Configuration.GetConnectionString("Napraw
 builder.Services.AddSingleton<INaprawyDbStorage>(x => new NaprawyDbStorage(firebirdConnectionString));
 //https://stackoverflow.com/questions/53884417/net-core-di-ways-of-passing-parameters-to-constructor
 var app = builder.Build();
-
+//Ustawienie certyfikatów:
+//https://stackoverflow.com/questions/64186403/blazor-web-assembly-app-net-core-hosted-publish-runtime-error/66448397#66448397
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
