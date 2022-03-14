@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://172.16.0.126:43294",
+      "applicationUrl": "http://localhost:43294",
       "sslPort": 44323
     }
   },
@@ -11,7 +11,7 @@
     "angularAuthorizationExample": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://172.16.0.126:7006;http://172.16.0.126:5297",
+      "applicationUrl": "https://localhost:7006;http://172.16.0.126:5297",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
