@@ -13,7 +13,7 @@ namespace angularAuthorizationExample.Models
         // public int? IdMaintenanceDictionary{get; set;}
         // public string? MaintenanceName {get;set;}
         public string? Description{get; set;}
-        public int Quantity{get; set;}
+        public decimal Quantity{get; set;}
         public decimal Price{get; set;}
         public decimal Cost{get; set;}
         public bool Delted{get; set;}

@@ -320,7 +320,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                         Part = part,
                         Maintenance = maintenance,                    
                         Description = context.GetString("opis"),
-                        Quantity = context.GetInt32("ilosc"),
+                        Quantity = context.GetDecimal("ilosc"),
                         Price = context.GetDecimal("cena_jedn"),
                         Cost = context.GetDecimal("koszt")
                     };
