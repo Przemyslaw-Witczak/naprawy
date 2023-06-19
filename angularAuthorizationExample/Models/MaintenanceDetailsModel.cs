@@ -16,6 +16,6 @@ namespace angularAuthorizationExample.Models
         public decimal Quantity{get; set;}
         public decimal Price{get; set;}
         public decimal Cost{get; set;}
-        public bool Delted{get; set;}
+        public bool Deleted{get; set;}
     }
 }

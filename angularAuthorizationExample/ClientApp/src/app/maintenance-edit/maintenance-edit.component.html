@@ -14,7 +14,7 @@
 
         <div class="form-group">
             <label>Data:</label>                        
-            <input type="date" #maintenanceDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenance.maintenanceDate | date:'yyyy-MM-dd'" name="maintenanceDate" >            
+            <input type="date" #maintenanceDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenance.maintenanceDate | date:'yyyy-MM-dd'" (ngModelChange)="onDateChange($event)" name="maintenanceDate" >            
         </div>
         <div class="form-group">
             <label>Przebieg:</label>

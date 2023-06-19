@@ -355,8 +355,8 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     maintenance.Id = context.GetInt32("new_id");
             }
 
-            var positionsToDelete = maintenance.MaintenanceDetailsList?.FindAll(x=>x.Delted && x.IdMaintenanceDetails>0);
-            var positionsToUpdate = maintenance.MaintenanceDetailsList?.FindAll(x=>!x.Delted);
+            var positionsToDelete = maintenance.MaintenanceDetailsList?.FindAll(x=>x.Deleted && x.IdMaintenanceDetails>0);
+            var positionsToUpdate = maintenance.MaintenanceDetailsList?.FindAll(x=>!x.Deleted);
             //delete positions marked as deleted
             if (positionsToDelete!=null)
             {
