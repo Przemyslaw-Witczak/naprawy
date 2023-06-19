@@ -32,8 +32,10 @@ export class MaintenanceEditComponent implements OnInit {
     if (this.maintenanceId!=null && this.maintenanceId>0)
     {
       this.http.get<IMaintenanceAngularModel>(this.baseUrl + 'MaintenancesEdit/'+this.maintenanceId).subscribe(result => {
-        this.maintenance = result;    
+        this.maintenance = result;
+        console.log(result);
       }, error => this.errorMsg = error);
+      
     }
     else
     {
@@ -42,6 +44,13 @@ export class MaintenanceEditComponent implements OnInit {
 
 
    }
+
+  onDateChange(newDate: string) {
+    // Perform any necessary actions with the updated date value
+    console.log('New date:', newDate);
+    if (this.maintenance != undefined)
+      this.maintenance.maintenanceDate = new Date(newDate);
+  }
 
   ngOnInit(): void {
     
