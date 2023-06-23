@@ -40,41 +40,70 @@
 
 <!-- Lista czynności - historia przebiegu pojazdu -->
 <div *ngIf="selectedVehicle && !selectedMaintenance && maintenancesList.length>0">
-  <h3>Podsumowanie</h3>    
-  <table>    
+  <h3>Podsumowanie</h3>
+  <table>
     <tr><th>Przejechano:</th><td>{{maintenancesList[maintenancesList.length-1].distance}} [km]</td></tr>
-    <tr><th>Koszt:</th><td>{{getSummaryCost() | currency:'PLN'}}</td></tr>  
-        
+    <tr><th>Koszt:</th><td>{{getSummaryCost() | currency:'PLN'}}</td></tr>
+
   </table>
-  
+
   <table>
     <tr>
-      <td ><h2>Historia</h2></td>
-      <td><button class="btn btn-primary" (click)="onAddMaintenance()">Dodaj wpis</button></td></tr>
+      <td><h2>Historia</h2></td>
+      <td><button class="btn btn-primary" (click)="onAddMaintenance()">Dodaj wpis</button></td>
+    </tr>
   </table>
-  
+
+  <div *ngIf="selectedVehicle && !selectedMaintenance">
+    <a *ngIf="!filtersEnabled" (click)="showHideFilters()" cButton class="me-1" color="primary">Pokaż panel filtrów</a>
+    <div *ngIf="filtersEnabled">
+      <h4>Filtry:</h4>
+      <label>Data od:</label>
+      <input type="date" #maintenanceDateFrom="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenanceFilters?.maintenanceDateFrom | date:'yyyy-MM-dd'" name="maintenanceDateFrom">
+
+      <label>Data do:</label>
+      <input type="date" #maintenanceDateTo="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenanceFilters?.maintenanceDateTo | date:'yyyy-MM-dd'" name="maintenanceDateTo">
+
+      <label>Nazwa części:</label>
+      <input type="text" #partName class="form-control" [ngModel]="maintenanceFilters?.partName">
+
+      <label>Nazwa czynności:</label>
+      <input type="text" #maintenanceName class="form-control" [ngModel]="maintenanceFilters?.maintenanceName" />
+
+      <div>
+        <label>Zliczaj koszty:</label><br />
+        <input type="checkbox" name="kosztyPaliwa" #fuelCosts class="form-control" [ngModel]="maintenanceFilters?.sumFuelCosts"/><label for="kosztyPaliwa">paliwa</label><br />
+        <input type="checkbox" name="kosztyNapraw" #maintenanceCosts class="form-control" [ngModel]="maintenanceFilters?.sumMaintenanceCosts"/><label for="kosztyNapraw">napraw</label><br />
+      </div>
+      
+      <p>{{maintenanceFilters | json}}</p>
+
+      <button class="btn btn-primary btn-sm">Filtruj</button>
+      <a (click)="showHideFilters()" cButton class="me-1" color="primary">Anuluj</a>
+    </div>
+  </div>
   <table class='table table-striped table-sm table-hover' aria-labelledby="tableLabel" *ngIf="vehiclesList">
-      <thead>
-        <tr>
-          <th>Lp</th>
-          <th>Data</th>
-          <th>Stan licznika</th>        
-          <th>Opis</th>
-          <th>Koszt</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let maintenance of maintenancesList; index as i" (click)="onMaintenanceSelect(maintenance)" [class.selected]="isMaintenanceSelected(maintenance)">
-          <td>{{i+1}}</td>
-          <td>{{maintenance.maintenanceDate | date:'YYYY-MM-dd'}}</td>        
-          <td>{{maintenance.mileage}}</td>
-          <td>{{maintenance.description}} {{maintenance.errorMessage}}</td>
-          <td>{{maintenance.cost | currency:'PLN'}}</td>
-          <td><button class="btn btn-primary btn-sm" (click)="onMaintenanceSelect(maintenance)">Pokaż</button></td>
-          <td><button class="btn btn-primary btn-sm" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td>
-        </tr>
-      </tbody>
-  </table> 
+    <thead>
+      <tr>
+        <th>Lp</th>
+        <th>Data</th>
+        <th>Stan licznika</th>
+        <th>Opis</th>
+        <th>Koszt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let maintenance of maintenancesList; index as i" (click)="onMaintenanceSelect(maintenance)" [class.selected]="isMaintenanceSelected(maintenance)">
+        <td>{{i+1}}</td>
+        <td>{{maintenance.maintenanceDate | date:'YYYY-MM-dd'}}</td>
+        <td>{{maintenance.mileage}}</td>
+        <td>{{maintenance.description}} {{maintenance.errorMessage}}</td>
+        <td>{{maintenance.cost | currency:'PLN'}}</td>
+        <td><button class="btn btn-primary btn-sm" (click)="onMaintenanceSelect(maintenance)">Pokaż</button></td>
+        <td><button class="btn btn-primary btn-sm" (click)="onMaintenanceDelete(maintenance)">Usuń</button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 
