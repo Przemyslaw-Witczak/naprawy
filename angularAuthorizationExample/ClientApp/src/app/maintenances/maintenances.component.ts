@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IVehicleAngularModel } from '../vehicles-list/VehicleAngularModel';
+import { MaintenanceFiltersModel } from './maintenance-filters-model';
 import { IMaintenanceAngularModel } from './MaintenanceModel';
 
 @Component({
@@ -13,10 +14,12 @@ export class MaintenancesComponent implements OnInit {
   inputVehicleId: number | undefined;
   public selectedVehicle: IVehicleAngularModel | null | undefined = null;
   public vehiclesList: IVehicleAngularModel[] = [];
-  
+  maintenanceFilters: MaintenanceFiltersModel | null = null;
   inputMaintenanceId: number | undefined;
   public maintenancesList: IMaintenanceAngularModel[] = []
   public selectedMaintenance: IMaintenanceAngularModel | null | undefined = null;
+
+  filtersEnabled: boolean = false;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) { 
     http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
@@ -101,6 +104,12 @@ export class MaintenancesComponent implements OnInit {
   onAddMaintenance()
   {
     this.router.navigate(['/maintenance-edit', this.selectedVehicle?.id, 0]);
+  }
+
+  showHideFilters() {
+    this.filtersEnabled = !this.filtersEnabled;
+    if (this.filtersEnabled)
+      this.maintenanceFilters = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName:'' };
   }
 
   getSummaryCost(): number
