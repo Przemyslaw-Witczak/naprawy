@@ -58,28 +58,29 @@
     <a *ngIf="!filtersEnabled" (click)="showHideFilters()" cButton class="me-1" color="primary">Pokaż panel filtrów</a>
     <div *ngIf="filtersEnabled">
       <h4>Filtry:</h4>
-      <label>Data od:</label>
-      <input type="date" #maintenanceDateFrom="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenanceFilters?.maintenanceDateFrom | date:'yyyy-MM-dd'" name="maintenanceDateFrom">
+      <!--<form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSearch()" novalidate>-->
+        <label>Data od:</label>
+        <!--<input type="date" #maintenanceDateFrom="ngModel" class="form-control" placeholder="yyyy-MM-dd" [(ngModel)]="maintenanceFilters.maintenanceDateFrom" name="maintenanceDateFrom">-->
 
-      <label>Data do:</label>
-      <input type="date" #maintenanceDateTo="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenanceFilters?.maintenanceDateTo | date:'yyyy-MM-dd'" name="maintenanceDateTo">
+        <label>Data do:</label>
+        <!--<input type="date" #maintenanceDateTo="ngModel" class="form-control" placeholder="yyyy-MM-dd" [(ngModel)]="maintenanceFilters.maintenanceDateTo" name="maintenanceDateTo">-->
 
-      <label>Nazwa części:</label>
-      <input type="text" #partName class="form-control" [ngModel]="maintenanceFilters?.partName">
+        <label>Nazwa części:</label>
+        <input type="text" #partName [(ngModel)]="$maintenanceFilters.partName">
 
-      <label>Nazwa czynności:</label>
-      <input type="text" #maintenanceName class="form-control" [ngModel]="maintenanceFilters?.maintenanceName" />
+        <label>Nazwa czynności:</label>
+        <input type="text" #maintenanceName [(ngModel)]="$maintenanceFilters.maintenanceName" >
 
-      <div>
-        <label>Zliczaj koszty:</label><br />
-        <input type="checkbox" name="kosztyPaliwa" #fuelCosts class="form-control" [ngModel]="maintenanceFilters?.sumFuelCosts"/><label for="kosztyPaliwa">paliwa</label><br />
-        <input type="checkbox" name="kosztyNapraw" #maintenanceCosts class="form-control" [ngModel]="maintenanceFilters?.sumMaintenanceCosts"/><label for="kosztyNapraw">napraw</label><br />
-      </div>
-      
-      <p>{{maintenanceFilters | json}}</p>
+        <div>
+          <label>Zliczaj koszty:</label><br />
+          <input type="checkbox" #fuelCosts [checked]="$maintenanceFilters?.sumFuelCosts"><label for="kosztyPaliwa">paliwa</label><br />
+          <input type="checkbox" #maintenanceCosts [checked]="$maintenanceFilters?.sumMaintenanceCosts"><label for="kosztyNapraw">napraw</label><br />
+        </div>
+        <!--</form>-->
+        <p>{{$maintenanceFilters | json}}</p>
 
-      <button class="btn btn-primary btn-sm">Filtruj</button>
-      <a (click)="showHideFilters()" cButton class="me-1" color="primary">Anuluj</a>
+        <button class="btn btn-primary btn-sm">Filtruj</button>
+        <a (click)="showHideFilters()" cButton class="me-1" color="primary">Anuluj</a>
     </div>
   </div>
   <table class='table table-striped table-sm table-hover' aria-labelledby="tableLabel" *ngIf="vehiclesList">
