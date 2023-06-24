@@ -14,12 +14,13 @@ export class MaintenancesComponent implements OnInit {
   inputVehicleId: number | undefined;
   public selectedVehicle: IVehicleAngularModel | null | undefined = null;
   public vehiclesList: IVehicleAngularModel[] = [];
-  maintenanceFilters: MaintenanceFiltersModel | null = null;
+  $maintenanceFilters: MaintenanceFiltersModel = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName: '' };
   inputMaintenanceId: number | undefined;
   public maintenancesList: IMaintenanceAngularModel[] = []
   public selectedMaintenance: IMaintenanceAngularModel | null | undefined = null;
 
   filtersEnabled: boolean = false;
+  submitted: boolean = false;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) { 
     http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
@@ -109,7 +110,7 @@ export class MaintenancesComponent implements OnInit {
   showHideFilters() {
     this.filtersEnabled = !this.filtersEnabled;
     if (this.filtersEnabled)
-      this.maintenanceFilters = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName:'' };
+      this.$maintenanceFilters = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName:'' };
   }
 
   getSummaryCost(): number
@@ -151,5 +152,10 @@ export class MaintenancesComponent implements OnInit {
             maintenance.errorMessage = error.error.komunikat.errors[0].errorMessage;            
           });
     }
+  }
+
+  onSearch() {
+    if (this.selectedVehicle != null && this.selectedVehicle != undefined)
+      this.onVehicleSelect(this.selectedVehicle);
   }
 }
