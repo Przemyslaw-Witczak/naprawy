@@ -16,6 +16,7 @@ export class MaintenanceEditComponent implements OnInit {
   public vehicleId: number = 0;
   public maintenanceId: number | null=0;
   public maintenance: IMaintenanceAngularModel | null = null;
+  
   public errorMsg = '';
   public debugData = '';
   public submitted: boolean = false;

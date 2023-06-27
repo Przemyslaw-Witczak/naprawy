@@ -3,6 +3,7 @@ using angularAuthorizationExample.Models;
 using FbCoreClientNameSpace;
 using FirebirdSql.Data.FirebirdClient;
 using Microsoft.AspNetCore.Mvc;
+using NLog.Filters;
 
 namespace angularAuthorizationExample.Data;
 
@@ -223,28 +224,54 @@ public class NaprawyDbStorage : INaprawyDbStorage
     #endregion
 
     #region Maintenances
-    public Task<List<MaintenanceModel>> GetAllMaintenances(int VehicleId)
+    public Task<List<MaintenanceModel>> GetFilteredMaintenances(FilterMaintenancesModel filters)
     {
         Task<List<MaintenanceModel>> getAllMaintenancesTask = Task.Factory.StartNew(() => {
             var maintenances = new List<MaintenanceModel>();
             using (var context = new FbCoreClient(_connectionString))
             {
-                context.AddSQL(@"select * from POKAZ_NAPRAWY(:id_pozycji, :id_pojazdu, :data_od, :data_do, :przebieg, :licznik_od, :licznik_do, :tankowania)");
+                context.AddSQL(@"select * from POKAZ_NAPRAWY(:id_pozycji, :id_pojazdu, :data_od, :data_do, :przebieg, :licznik_od, :licznik_do, :tankowania, :naprawy, :partName, :maintenanceName)");
                 context.SetNull("id_pozycji");
-                context.ParamByName("id_pojazdu", FbDbType.Integer).Value = VehicleId;
-                context.SetNull("data_od");
-                context.SetNull("data_do");
+                context.ParamByName("id_pojazdu", FbDbType.Integer).Value = filters.VehicleId;
+                
+                if (filters.MaintenanceDateFrom!=null)
+                    context.ParamByName("data_od", FbDbType.Date).Value = filters.MaintenanceDateFrom;
+                else
+                    context.SetNull("data_od");
+               
+                if (filters.MaintenanceDateTo!=null)
+                    context.ParamByName("data_do", FbDbType.Date).Value = filters.MaintenanceDateTo;
+                else
+                    context.SetNull("data_do");
+               
                 context.SetNull("przebieg");
                 context.SetNull("licznik_od");
                 context.SetNull("licznik_do");
-                context.SetNull("tankowania");
+                if (filters.SumFuelCosts)
+                    context.ParamByName("tankowania", FbDbType.Boolean).Value = true;
+                else
+                    context.SetNull("tankowania");
 
+                if (filters.SumMaintenanceCosts)
+                    context.ParamByName("naprawy", FbDbType.Boolean).Value = true;
+                else
+                    context.SetNull("naprawy");
+
+                if (string.IsNullOrEmpty(filters.MaintenanceName))
+                    context.SetNull("maintenanceName");
+                else
+                    context.ParamByName("maintenanceName", FbDbType.VarChar).Value = filters.MaintenanceName;
+
+                if (string.IsNullOrEmpty(filters.PartName))
+                    context.SetNull("partName");
+                else
+                    context.ParamByName("partName", FbDbType.VarChar).Value = filters.PartName;
                 context.Execute();
                 while(context.Read())
                 {
                     var vehicle = new MaintenanceModel()
                     {
-                        IdVehicle = VehicleId,
+                        IdVehicle = filters.VehicleId,
                         Id = context.GetInt32("id_main"),
                         MaintenanceDate = context.GetDateTime("data"),
                         Mileage = context.GetInt32("przebieg"),
@@ -254,6 +281,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     };
                     maintenances.Add(vehicle);
                 }
+                
                 return maintenances;
             }
         });
@@ -430,6 +458,8 @@ public class NaprawyDbStorage : INaprawyDbStorage
         });
         return deleteTask;
     }
-   
+
+    
+
     #endregion
 }
