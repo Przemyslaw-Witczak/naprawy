@@ -17,8 +17,8 @@ public interface INaprawyDbStorage
     Task<string> DeleteVehicle(int vehicleId);
     #endregion
 
-    #region Maintenances
-    Task<List<MaintenanceModel>> GetAllMaintenances(int VehicleId);
+    #region Maintenances    
+    Task<List<MaintenanceModel>> GetFilteredMaintenances(FilterMaintenancesModel filters);
     Task<MaintenanceModel> GetMaintenanceById(int maintenanceId);
     Task<List<MaintenanceDetailsModel>>GetMaintenanceDetails(int maintenanceId);
     Task CreateOrUpdateMaintenance(MaintenanceModel maintenance);

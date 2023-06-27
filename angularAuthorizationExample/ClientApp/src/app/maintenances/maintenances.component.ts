@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IVehicleAngularModel } from '../vehicles-list/VehicleAngularModel';
@@ -14,7 +14,7 @@ export class MaintenancesComponent implements OnInit {
   inputVehicleId: number | undefined;
   public selectedVehicle: IVehicleAngularModel | null | undefined = null;
   public vehiclesList: IVehicleAngularModel[] = [];
-  $maintenanceFilters: MaintenanceFiltersModel = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName: '' };
+  $maintenanceFilters: MaintenanceFiltersModel = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: false, sumMaintenanceCosts: false, partName: '', maintenanceName: '', vehicleId:0 };
   inputMaintenanceId: number | undefined;
   public maintenancesList: IMaintenanceAngularModel[] = []
   public selectedMaintenance: IMaintenanceAngularModel | null | undefined = null;
@@ -70,12 +70,23 @@ export class MaintenancesComponent implements OnInit {
   onVehicleSelect(vehicle: IVehicleAngularModel)
   {
     this.selectedVehicle = vehicle;
+    this.$maintenanceFilters.vehicleId = vehicle.id;
+    //this.http.get<IMaintenanceAngularModel[]>(this.baseUrl + 'Maintenances/'+vehicle.id).subscribe(result => {
+    //    this.maintenancesList = result;
+    //    if (this.inputMaintenanceId)
+    //    this.selectedMaintenance = this.selectMaintenanceById(this.inputMaintenanceId);
+    //  }, error => console.error(error));
+    const headers = new HttpHeaders({ 'Content-Type': 'text/json', 'accept': '*/*' });
+    const body = JSON.stringify(this.$maintenanceFilters);
+
+    //const params = new HttpParams({ fromObject: this.maintenanceFilters });
     
-    this.http.get<IMaintenanceAngularModel[]>(this.baseUrl + 'Maintenances/'+vehicle.id).subscribe(result => {
-        this.maintenancesList = result;   
-        if (this.inputMaintenanceId)   
+
+    this.http.post<IMaintenanceAngularModel[]>(this.baseUrl + 'Maintenances/GetFilteredMaintenances', body, {headers}).subscribe(result => {
+      this.maintenancesList = result;
+      if (this.inputMaintenanceId)
         this.selectedMaintenance = this.selectMaintenanceById(this.inputMaintenanceId);
-      }, error => console.error(error));
+    }, error => console.error(error));
   }
 
   selectMaintenanceById(maintenanceId: number): IMaintenanceAngularModel | null
@@ -110,7 +121,7 @@ export class MaintenancesComponent implements OnInit {
   showHideFilters() {
     this.filtersEnabled = !this.filtersEnabled;
     if (this.filtersEnabled)
-      this.$maintenanceFilters = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName:'' };
+      this.$maintenanceFilters = { maintenanceDateFrom: null, maintenanceDateTo: null, sumFuelCosts: true, sumMaintenanceCosts: true, partName: '', maintenanceName:'', vehicleId:0 };
   }
 
   getSummaryCost(): number
