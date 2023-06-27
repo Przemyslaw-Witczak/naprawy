@@ -27,14 +27,32 @@ namespace angularAuthorizationExample.Controllers
             
             try
             {
-                return Ok(await _dbStorage.GetAllMaintenances(vehicleId));
+                var vehicleIdFilter = new FilterMaintenancesModel() { VehicleId = vehicleId };
+                return Ok(await _dbStorage.GetFilteredMaintenances(vehicleIdFilter));
 
             }
             catch(Exception ex)
             {
                 _logger.LogError($"Exception in {nameof(GetAllMaintenances)}.", ex);
-                return StatusCode(StatusCodes.Status500InternalServerError, $"There was exception while receiving maintenances for vehicleId={vehicleId} by '{nameof(_dbStorage.GetAllMaintenances)}' from database: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"There was exception while receiving maintenances for vehicleId={vehicleId} by '{nameof(_dbStorage.GetFilteredMaintenances)}' from database: {ex.Message}");
             }                   
+        }
+
+        [HttpPost]
+        [Route("GetFilteredMaintenances")]
+        public async Task<ActionResult<MaintenanceModel[]>> GetFilteredMaintenances([FromBody] FilterMaintenancesModel maintenancesFilter)
+        {
+            //FilterMaintenancesModel maintenancesFilter = null;
+            try
+            {
+                return Ok(await _dbStorage.GetFilteredMaintenances(maintenancesFilter));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception in {nameof(GetAllMaintenances)}.", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"There was exception while receiving maintenances for vehicleId={maintenancesFilter.VehicleId} by '{nameof(_dbStorage.GetFilteredMaintenances)}' from database: {ex.Message}");
+            }
         }
 
         [HttpDelete("{maintenanceId:int}")]
@@ -61,21 +79,21 @@ namespace angularAuthorizationExample.Controllers
                     $"Error deleting maintenance id={maintenanceId}");
             }
         }
-    
+
         [HttpPost]
-        public async Task<ActionResult<MaintenanceModel>> SaveMaintenance([FromBody]MaintenanceModel maintenance)
+        public async Task<ActionResult<MaintenanceModel>> SaveMaintenance([FromBody] MaintenanceModel maintenance)
         {
             Debug.WriteLine($"Changed maintenance {maintenance?.ToString()}");
             _logger.LogDebug($"Saving maintenance. {maintenance?.ToString()}");
             try
-            {          
-                if (maintenance==null)
+            {
+                if (maintenance == null)
                     return BadRequest();
                 await _dbStorage.CreateOrUpdateMaintenance(maintenance);
-               
-                return CreatedAtAction(nameof(SaveMaintenance), new {id=maintenance.Id}, maintenance);
+
+                return CreatedAtAction(nameof(SaveMaintenance), new { id = maintenance.Id }, maintenance);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var errorMessage = $"Error saving changes to Maintenance={maintenance?.ToString()}.";
                 _logger.LogError(errorMessage, ex);
