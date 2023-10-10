@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { NumberValueAccessor } from '@angular/forms';
+import { NumberValueAccessor, FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IMaintenanceDetailsAngularModel } from '../maintenances/MaintenanceDetailsAngularModel';
 import { IMaintenanceAngularModel } from '../maintenances/MaintenanceModel';
@@ -38,7 +38,16 @@ export class MaintenanceEditComponent implements OnInit {
     }
     else
     {
-      this.maintenance = <IMaintenanceAngularModel>{idVehicle: this.vehicleId, maintenanceDate: new Date()};
+      const currentDate = new Date();
+
+      // Format the date as "yyyy-MM-dd"
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are 0-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
+
+      // Combine the parts into the desired format
+      // let maintenanceDate = `${year}-${month}-${day}`;
+      this.maintenance = <IMaintenanceAngularModel>{ idVehicle: this.vehicleId, maintenanceDate: `${year}-${month}-${day}` };
     }
 
 
@@ -81,8 +90,11 @@ export class MaintenanceEditComponent implements OnInit {
     if (savedPositions)
     {
       this.changedDetails = true;
-      if (this.maintenance)
+      if (this.maintenance) {
         this.maintenance.maintenanceDetailsList = savedPositions;
+        console.log(savedPositions);
+      }
+        
     }
   }
 }

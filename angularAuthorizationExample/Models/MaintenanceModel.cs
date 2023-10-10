@@ -4,7 +4,8 @@ namespace angularAuthorizationExample.Models
     {
         public int IdVehicle {get; set;}
         public int Id {get; set;}
-        public DateTime MaintenanceDate{get; set;}    
+        //ToDo: Change it to string type
+        public string MaintenanceDate{get; set;}    
         public Decimal Mileage{get; set;}
         public string? Description{get; set;}
         public decimal Cost{get; set;}
