@@ -41,7 +41,7 @@ namespace angularAuthorizationExample.Controllers
                         {
                             Distance = 0,
                             Mileage = 0,
-                            MaintenanceDate = DateTime.Now,
+                            MaintenanceDate = DateTime.Now.ToString("yyyy-MM-dd"),
                             MaintenanceDetailsList = new List<MaintenanceDetailsModel>()
                         };
                     }

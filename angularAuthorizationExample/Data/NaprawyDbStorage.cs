@@ -273,7 +273,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     {
                         IdVehicle = filters.VehicleId,
                         Id = context.GetInt32("id_main"),
-                        MaintenanceDate = context.GetDateTime("data"),
+                        MaintenanceDate = context.GetDateTime("data").ToString("yyyy-MM-dd"),
                         Mileage = context.GetInt32("przebieg"),
                         Description = context.GetString("opis"),
                         Cost = context.GetDecimal("koszt"),
@@ -301,7 +301,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                 {                                    
                     maintenance.IdVehicle = context.GetInt32("wy_id_pojazdy");
                     maintenance.Id = maintenanceId;
-                    maintenance.MaintenanceDate = context.GetDateTime("wy_data");
+                    maintenance.MaintenanceDate = context.GetDateTime("wy_data").ToString("yyyy-MM-dd");
                     maintenance.Mileage = context.GetDecimal("wy_przebieg");
                     maintenance.Description = context.GetString("wy_opis");
                     maintenance.Cost = context.GetDecimal("wy_koszt");
@@ -371,7 +371,7 @@ public class NaprawyDbStorage : INaprawyDbStorage
                     context.ParamByName("id_main", FbDbType.Integer).Value = maintenance.Id;
                 else
                     context.SetNull("id_main");
-                context.ParamByName("data", FbDbType.Date).Value = maintenance.MaintenanceDate;
+                context.ParamByName("data", FbDbType.Date).Value = Convert.ToDateTime(maintenance.MaintenanceDate);
                 context.ParamByName("przebieg", FbDbType.Integer).Value = maintenance.Mileage;
                 context.SetNull("przejechano");
                 if (string.IsNullOrEmpty(maintenance.Description))

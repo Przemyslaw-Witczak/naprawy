@@ -10,12 +10,11 @@
 
 
 <div *ngIf="maintenance != null && !hideMaintenance">
-    <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
-
-        <div class="form-group">
-            <label>Data:</label>                        
-            <input type="date" #maintenanceDate="ngModel" class="form-control" placeholder="yyyy-MM-dd" [ngModel]="maintenance.maintenanceDate | date:'yyyy-MM-dd'" name="maintenanceDate" >            
-        </div>
+    <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>      
+      <div class="form-group">
+        <label>Data:</label>
+        <input type="date" #maintenanceDate="ngModel" class="form-control" [(ngModel)]="maintenance.maintenanceDate" name="maintenanceDate">        
+      </div>
         <div class="form-group">
             <label>Przebieg:</label>
             <input type="text" required #mileage="ngModel" [class.is-invalid]="mileage.invalid && mileage.touched" class="form-control" [(ngModel)]="maintenance.mileage" name="mileage" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
@@ -23,8 +22,7 @@
         </div> 
         
         <div class="form-group">
-            <label>Opis:</label>
-            <!-- <input type="text" #description="ngModel" [class.is-invalid]="description.invalid && description.touched" class="form-control" [(ngModel)]="maintenance.description" name="description">             -->
+            <label>Opis:</label>            
             <textarea class="form-control" #description="ngModel" [class.is-invalid]="description.invalid && description.touched" class="form-control" [(ngModel)]="maintenance.description" name="description" rows="3"></textarea>
         </div>                
     <div>
