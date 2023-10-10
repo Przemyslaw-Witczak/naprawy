@@ -90,8 +90,11 @@ export class MaintenanceEditComponent implements OnInit {
     if (savedPositions)
     {
       this.changedDetails = true;
-      if (this.maintenance)
+      if (this.maintenance) {
         this.maintenance.maintenanceDetailsList = savedPositions;
+        console.log(savedPositions);
+      }
+        
     }
   }
 }

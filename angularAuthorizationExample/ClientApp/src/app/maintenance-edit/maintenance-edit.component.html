@@ -34,4 +34,6 @@
  
 <div *ngIf="maintenance!=null">
     <app-maintenances-details [parentMaintenanceId]="maintenance.id" [editingMode]="true" (isEditingPositionEvent)="hideMaintenance=$event" (onChange)="onPositionsChanged($event)"></app-maintenances-details>
+
+    <p>{{maintenance.maintenanceDetailsList | json}}</p>
 </div> 
