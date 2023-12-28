@@ -20,6 +20,78 @@ import { MaintenancesDetailsComponent } from './maintenances-details/maintenance
 import { MaintenanceEditComponent } from './maintenance-edit/maintenance-edit.component';
 import { MaintenanceDetailEditComponent } from './maintenance-detail-edit/maintenance-detail-edit.component';
 
+import {
+  IPublicClientApplication,
+  PublicClientApplication,
+  BrowserCacheLocation,
+  LogLevel,
+  InteractionType,
+} from '@azure/msal-browser';
+import {
+  MSAL_INSTANCE,
+  MSAL_INTERCEPTOR_CONFIG,
+  MsalInterceptorConfiguration,
+  MSAL_GUARD_CONFIG,
+  MsalGuardConfiguration,
+  MsalBroadcastService,
+  MsalService,
+  MsalGuard,
+  MsalRedirectComponent,
+  MsalModule,
+  MsalInterceptor,
+} from '@azure/msal-angular';
+
+
+const GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
+
+const isIE =
+  window.navigator.userAgent.indexOf('MSIE ') > -1 ||
+  window.navigator.userAgent.indexOf('Trident/') > -1;
+
+export function loggerCallback(logLevel: LogLevel, message: string) {
+  console.log(message);
+}
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: '6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d',
+      authority: 'https://login.microsoftonline.com/e9d9b795-b2a5-435c-97c9-77a382765404',
+      redirectUri: 'http://localhost:4200',
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+      storeAuthStateInCookie: isIE, // set to true for IE 11
+    },
+    system: {
+      loggerOptions: {
+        loggerCallback,
+        logLevel: LogLevel.Info,
+        piiLoggingEnabled: false,
+      },
+    },
+  });
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set(GRAPH_ENDPOINT, ['user.read']);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap,
+  };
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return {
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: ['user.read'],
+    },
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +125,22 @@ import { MaintenanceDetailEditComponent } from './maintenance-detail-edit/mainte
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory,
+    },
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useFactory: MSALGuardConfigFactory,
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory,
+    },
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@angular/cdk": "^17.0.4",
+    "@angular/material": "^17.0.4",
+    "@azure/msal-angular": "^3.0.9",
+    "@azure/msal-browser": "^3.6.0"
+  }
+}
