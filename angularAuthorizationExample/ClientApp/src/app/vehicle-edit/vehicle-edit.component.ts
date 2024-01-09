@@ -25,7 +25,7 @@ export class VehicleEditComponent implements OnInit {
     let id = parseInt(this.route.snapshot.paramMap.get('vehicleId') || '');
     this.vehicleId = id;
     console.log('Inicjalizacja formularza edycji pojazdu='+this.vehicleId)
-    if (this.vehicleId!=NaN)
+    if (!Number.isNaN(this.vehicleId))
     {
       this.http.get<IVehicleAngularModel>(this.baseUrl + 'Vehicles/'+this.vehicleId).subscribe(result => {
         this.vehicle = result;    
