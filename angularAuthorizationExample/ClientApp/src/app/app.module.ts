@@ -40,6 +40,7 @@ import {
   MsalModule,
   MsalInterceptor,
 } from '@azure/msal-angular';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
@@ -105,7 +106,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MaintenancesComponent,
     MaintenancesDetailsComponent,
     MaintenanceEditComponent,
-    MaintenanceDetailEditComponent
+    MaintenanceDetailEditComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -122,7 +124,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       { path: 'vehicle-edit/:vehicleId', component: VehicleEditComponent, canActivate: [MsalGuard] },      
       { path: 'maintenances', component: MaintenancesComponent, canActivate: [MsalGuard] },      
       { path: 'maintenances/:vehicleId/:maintenanceId', component: MaintenancesComponent, canActivate: [MsalGuard] },      
-      { path: 'maintenance-edit/:vehicleId/:maintenanceId', component: MaintenanceEditComponent, canActivate: [MsalGuard] }
+      { path: 'maintenance-edit/:vehicleId/:maintenanceId', component: MaintenanceEditComponent, canActivate: [MsalGuard] },
+      { path: 'profile', component: ProfileComponent, canActivate: [MsalGuard] }
     ])
   ],
   providers: [

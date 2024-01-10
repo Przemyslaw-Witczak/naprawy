@@ -25,7 +25,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
       this._destroying$.complete();
     }
   ngOnInit(): void {
-    this.authService.initialize();
+    
       this.msalBroadcastService.inProgress$
         .pipe(
           filter((status: InteractionStatus) => status === InteractionStatus.None),
