@@ -57,7 +57,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     auth: {
       clientId: '6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d',
       authority: 'https://login.microsoftonline.com/e9d9b795-b2a5-435c-97c9-77a382765404',
-      redirectUri: 'http://localhost:4200',
+      redirectUri: 'https://localhost:44464',
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -111,21 +111,22 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    ApiAuthorizationModule,
+   /* ApiAuthorizationModule,*/
+    MsalModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'czesci-dictionary', component: CzesciDictionaryComponent, canActivate: [AuthorizeGuard] },
-      { path: 'maintenances-dictionary', component: MaintenancesDictionaryComponent, canActivate: [AuthorizeGuard] },
-      { path: 'vehicles-list', component: VehiclesListComponent, canActivate: [AuthorizeGuard] },
-      { path: 'vehicles-list/:vehicleId', component: VehiclesListComponent, canActivate: [AuthorizeGuard] },
-      { path: 'vehicle-edit/:vehicleId', component: VehicleEditComponent, canActivate: [AuthorizeGuard] },      
-      { path: 'maintenances', component: MaintenancesComponent, canActivate: [AuthorizeGuard] },      
-      { path: 'maintenances/:vehicleId/:maintenanceId', component: MaintenancesComponent, canActivate: [AuthorizeGuard] },      
-      { path: 'maintenance-edit/:vehicleId/:maintenanceId', component: MaintenanceEditComponent, canActivate: [AuthorizeGuard] }
+      { path: 'czesci-dictionary', component: CzesciDictionaryComponent, canActivate: [MsalGuard] },
+      { path: 'maintenances-dictionary', component: MaintenancesDictionaryComponent, canActivate: [MsalGuard] },
+      { path: 'vehicles-list', component: VehiclesListComponent, canActivate: [MsalGuard] },
+      { path: 'vehicles-list/:vehicleId', component: VehiclesListComponent, canActivate: [MsalGuard] },
+      { path: 'vehicle-edit/:vehicleId', component: VehicleEditComponent, canActivate: [MsalGuard] },      
+      { path: 'maintenances', component: MaintenancesComponent, canActivate: [MsalGuard] },      
+      { path: 'maintenances/:vehicleId/:maintenanceId', component: MaintenancesComponent, canActivate: [MsalGuard] },      
+      { path: 'maintenance-edit/:vehicleId/:maintenanceId', component: MaintenanceEditComponent, canActivate: [MsalGuard] }
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory,
@@ -142,6 +143,6 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalGuard,
     MsalBroadcastService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }

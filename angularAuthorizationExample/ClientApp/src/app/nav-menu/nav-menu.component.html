@@ -15,40 +15,30 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+           [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <li class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Główna</a>
-          </li>                    
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/maintenances']"
-              >Naprawy</a
-            >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/vehicles-list']"
-              >Pojazdy</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/maintenances']">Naprawy</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/czesci-dictionary']"
-              >Części</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/vehicles-list']">Pojazdy</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/maintenances-dictionary']"
-              >Czynności</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/czesci-dictionary']">Części</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/maintenances-dictionary']">Czynności</a>
           </li>
         </ul>
-        <app-login-menu></app-login-menu>
+        <!--<app-login-menu></app-login-menu>-->
+        <button *ngIf="!loginDisplay" (click)="login()">Login</button>
+        <button *ngIf="loginDisplay" (click)="logout()">Logout</button>
       </div>
     </div>
   </nav>
