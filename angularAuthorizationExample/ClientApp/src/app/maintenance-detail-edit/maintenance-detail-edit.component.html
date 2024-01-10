@@ -13,7 +13,7 @@
           <label>Czynność:</label>
           <select class="form-select mb-3" #maintenance="ngModel" [(ngModel)]="maintenancePosition.maintenance" name="maintenance">
               <!-- <option value="default">I am interested in</option> -->              
-              <option [ngValue]="maintenancePosition.maintenance">{{maintenancePosition.maintenance?.name}}</option>  
+              <option [ngValue]="maintenancePosition.maintenance">{{maintenancePosition.maintenance.name}}</option>  
               <option value="default">{{maintenancePosition.maintenance}}</option>         
               <option *ngFor="let maintenance of maintenancesDictionary" [ngValue]="maintenance">{{maintenance.name}}</option>
           </select>    
@@ -24,7 +24,7 @@
           <label>Część:</label>
           <select class="form-select mb-3" #part="ngModel" [(ngModel)]="maintenancePosition.part" name="part">
               <!-- <option value="default">I am interested in</option> -->     
-              <option [ngValue]="maintenancePosition.part">{{maintenancePosition.part?.name}}</option>         
+              <option [ngValue]="maintenancePosition.part">{{maintenancePosition.part.name}}</option>         
               <option *ngFor="let part of partsDictionary" [ngValue]="part">{{part.name}}</option>
           </select>    
           <!-- <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched">Please choose a topic</small>         -->
