@@ -47,7 +47,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
   setLoginDisplay() {
     this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
-    this.userName = this.authService.instance.getActiveAccount.name;
+    this.userName = this.authService.instance.getActiveAccount()?.name;
+    console.log("Display accounts from nav-menu.component");   
     console.log("Welcome, " + this.userName + "!");
   }
 
@@ -57,6 +58,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
         this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
           .subscribe((response: AuthenticationResult) => {
             this.authService.instance.setActiveAccount(response.account);
+            console.log(response);
             this.userName = response.account.name;
             console.log("Welcome, " + this.userName + "!");
           });

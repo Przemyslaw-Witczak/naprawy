@@ -34,7 +34,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setLoginDisplay() {
-    this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
+    let accounts = this.authService.instance.getAllAccounts();
+    this.loginDisplay = accounts.length > 0;
+    console.log("Display accounts from app.component");
+    console.log(accounts);
   }
 
   login() {
@@ -42,7 +45,10 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.msalGuardConfig.authRequest) {
         this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
           .subscribe((response: AuthenticationResult) => {
-            this.authService.instance.setActiveAccount(response.account);
+            this.authService.instance.setActiveAccount(response.account);            
+            console.log(response);
+            //this.userName = response.account.name;
+            //console.log("Welcome, " + this.userName + "!");
           });
       } else {
         this.authService.loginPopup()
