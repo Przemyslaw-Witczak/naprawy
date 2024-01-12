@@ -12,7 +12,8 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
   isIframe = false;
   loginDisplay = false;
-  private readonly _destroying$ = new Subject<void>();
+  private readonly _destroying$ = new Subject<void>();  
+  userName: string | undefined = "Not logged";
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -29,15 +30,19 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this._destroying$)
       )
       .subscribe(() => {
+        let accounts = this.authService.instance.getAllAccounts();
+        this.authService.instance.setActiveAccount(accounts[0]);
         this.setLoginDisplay();
+
       });
   }
 
   setLoginDisplay() {
-    let accounts = this.authService.instance.getAllAccounts();
-    this.loginDisplay = accounts.length > 0;
-    console.log("Display accounts from app.component");
-    console.log(accounts);
+    
+    //this.loginDisplay = accounts.length > 0;
+    this.userName = this.authService.instance.getActiveAccount()?.name;    
+    console.log("Display accounts from app.component: "+this.userName);
+    //console.log(accounts);
   }
 
   login() {
@@ -45,10 +50,10 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.msalGuardConfig.authRequest) {
         this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
           .subscribe((response: AuthenticationResult) => {
-            this.authService.instance.setActiveAccount(response.account);            
-            console.log(response);
-            //this.userName = response.account.name;
-            //console.log("Welcome, " + this.userName + "!");
+            this.authService.instance.setActiveAccount(response.account);
+            this.userName = response.account.name;
+            console.log("Logged as "+this.userName);
+            console.log(response);            
           });
       } else {
         this.authService.loginPopup()
@@ -76,6 +81,7 @@ export class AppComponent implements OnInit, OnDestroy {
         postLogoutRedirectUri: "/",
       });
     }
+    this.userName = undefined;
   }
 
   ngOnDestroy(): void {

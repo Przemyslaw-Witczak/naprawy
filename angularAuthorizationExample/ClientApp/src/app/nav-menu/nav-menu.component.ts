@@ -12,8 +12,8 @@ import { filter, takeUntil } from 'rxjs/operators';
 export class NavMenuComponent implements OnInit, OnDestroy {
   [x: string]: any;
   isExpanded = false;
-  loginDisplay = false;
-  userName: string | undefined = "Not logged";
+  //loginDisplay = false;
+  //userName: string | undefined = "Not logged";
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
@@ -52,41 +52,41 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     console.log("Welcome, " + this.userName + "!");
   }
 
-  login() {
-    if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
-      if (this.msalGuardConfig.authRequest) {
-        this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
-          .subscribe((response: AuthenticationResult) => {
-            this.authService.instance.setActiveAccount(response.account);
-            console.log(response);
-            this.userName = response.account.name;
-            console.log("Welcome, " + this.userName + "!");
-          });
-      } else {
-        this.authService.loginPopup()
-          .subscribe((response: AuthenticationResult) => {
-            this.authService.instance.setActiveAccount(response.account);
-          });
-      }
-    } else {
-      if (this.msalGuardConfig.authRequest) {
-        this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
-      } else {
-        this.authService.loginRedirect();
-      }
-    }
-  }
+  //login() {
+  //  if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+  //    if (this.msalGuardConfig.authRequest) {
+  //      this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
+  //        .subscribe((response: AuthenticationResult) => {
+  //          this.authService.instance.setActiveAccount(response.account);
+  //          console.log(response);
+  //          this.userName = response.account.name;
+  //          console.log("Welcome, " + this.userName + "!");
+  //        });
+  //    } else {
+  //      this.authService.loginPopup()
+  //        .subscribe((response: AuthenticationResult) => {
+  //          this.authService.instance.setActiveAccount(response.account);
+  //        });
+  //    }
+  //  } else {
+  //    if (this.msalGuardConfig.authRequest) {
+  //      this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
+  //    } else {
+  //      this.authService.loginRedirect();
+  //    }
+  //  }
+  //}
 
-  logout() {
-    if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
-      this.authService.logoutPopup({
-        postLogoutRedirectUri: "/",
-        mainWindowRedirectUri: "/"
-      });
-    } else {
-      this.authService.logoutRedirect({
-        postLogoutRedirectUri: "/",
-      });
-    }
-  }
+  //logout() {
+  //  if (this.msalGuardConfig.interactionType === InteractionType.Popup) {
+  //    this.authService.logoutPopup({
+  //      postLogoutRedirectUri: "/",
+  //      mainWindowRedirectUri: "/"
+  //    });
+  //  } else {
+  //    this.authService.logoutRedirect({
+  //      postLogoutRedirectUri: "/",
+  //    });
+  //  }
+  //}
 }
