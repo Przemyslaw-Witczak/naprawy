@@ -38,8 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setLoginDisplay() {
-    
-    //this.loginDisplay = accounts.length > 0;
+    let accounts = this.authService.instance.getAllAccounts();
+    this.loginDisplay = accounts.length > 0;
     this.userName = this.authService.instance.getActiveAccount()?.name;    
     console.log("Display accounts from app.component: "+this.userName);
     //console.log(accounts);
