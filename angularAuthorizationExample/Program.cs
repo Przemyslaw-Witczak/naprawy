@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
-using angularAuthorizationExample.Data;
-using angularAuthorizationExample.Models;
-using Microsoft.Extensions.DependencyInjection;
 using angularAuthorizationExample.Abstract;
+using angularAuthorizationExample.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -13,26 +8,34 @@ using angularAuthorizationExample.Abstract;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+//builder.Services.AddIdentityServer()
+//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-builder.Services.AddAuthentication()
-    .AddIdentityServerJwt();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
+
+builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
+            {
+                options.Authority = "https://login.microsoftonline.com/e9d9b795-b2a5-435c-97c9-77a382765404";
+                options.Audience = "6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d"; //client id
+            });
+
+builder.Services.AddAuthorization();
+
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddOptions();
-//builder.Services.AddSingleton<INaprawyDbStorage, NaprawyDbStorage>().AddOptions<string>("connectionString");
 var firebirdConnectionString = builder.Configuration.GetConnectionString("NaprawyConnection");
 builder.Services.AddSingleton<INaprawyDbStorage>(x => new NaprawyDbStorage(firebirdConnectionString));
 //https://stackoverflow.com/questions/53884417/net-core-di-ways-of-passing-parameters-to-constructor
@@ -55,7 +58,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseIdentityServer();
+//app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllerRoute(

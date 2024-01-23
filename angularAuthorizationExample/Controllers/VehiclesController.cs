@@ -1,11 +1,12 @@
 using System.Diagnostics;
 using angularAuthorizationExample.Abstract;
 using angularAuthorizationExample.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace angularAuthorizationExample.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class VehiclesController : ControllerBase
@@ -50,7 +51,7 @@ namespace angularAuthorizationExample.Controllers
                 {
                     vehicleToReturn = Task.Factory.StartNew(()=>
                     {
-                        VehicleModel vehicleModel = new VehicleModel()
+                        var vehicleModel = new VehicleModel()
                         {
                             Distance = 0,
                             Mileage = 0,
