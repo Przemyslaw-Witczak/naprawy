@@ -1,7 +1,8 @@
 using angularAuthorizationExample.Abstract;
 using angularAuthorizationExample.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Identity.Web;
 
 
 
@@ -23,14 +24,28 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
                 options.Authority = "https://login.microsoftonline.com/e9d9b795-b2a5-435c-97c9-77a382765404";
-                options.Audience = "6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d"; //client id
+                options.Audience = "api://6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d"; //client id
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = false                    
+                };
             });
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//                .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthorization(config =>
+//{
+//    config.AddPolicy("AuthZPolicy", policyBuilder =>
+//        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }));
+//});
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
 
 builder.Services.AddRazorPages();

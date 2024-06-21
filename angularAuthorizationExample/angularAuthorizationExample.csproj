@@ -20,7 +20,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1" />
     <PackageReference Include="FbClientCore" Version="1.0.1" />
     <PackageReference Include="FbClientBase" Version="1.0.0" />  
-    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.0.0" />
+    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.0.0" />  
+    <PackageReference Include="Microsoft.Identity.Web" Version="2.19.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
   </ItemGroup>
 

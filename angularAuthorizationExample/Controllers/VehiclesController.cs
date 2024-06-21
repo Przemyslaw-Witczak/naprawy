@@ -21,7 +21,9 @@ namespace angularAuthorizationExample.Controllers
             _dbStorage = dbStorage;        
         }
 
-        [HttpGet]        
+        [HttpGet]
+        //[Authorize(Policy = "AuthZPolicy")]
+        [Authorize]
         public async Task<ActionResult> GetAllVehicles()
         {
             
