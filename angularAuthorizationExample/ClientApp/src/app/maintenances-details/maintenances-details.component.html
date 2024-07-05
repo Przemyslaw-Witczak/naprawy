@@ -19,8 +19,8 @@
       <tbody>
         <tr *ngFor="let maintenance of detailsList; index as i">
           <td>{{i+1}}</td>
-          <td>{{maintenance.maintenance.name}}</td>        
-          <td>{{maintenance.part.name}}</td>
+          <td>{{maintenance.maintenance?.name}}</td>        
+          <td>{{maintenance.part?.name}}</td>
           <td>{{maintenance.price | currency:'PLN'}}</td>
           <td>{{maintenance.quantity}}</td>
           <td>{{maintenance.cost | currency:'PLN'}}</td>

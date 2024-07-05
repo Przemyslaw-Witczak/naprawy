@@ -20,7 +20,10 @@ const PROXY_CONFIG = [
       "/_framework"      
    ],
     target: target,
-    secure: false
+    secure: false,
+    changeOrigin: true,
+    // Add the following line to trust self-signed certificates
+    agent: new (require('https').Agent)({ rejectUnauthorized: false })
   }
 ]
 

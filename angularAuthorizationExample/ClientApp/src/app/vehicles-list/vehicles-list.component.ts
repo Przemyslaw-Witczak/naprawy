@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { IVehicleAngularModel } from './VehicleAngularModel';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MsalService } from '@azure/msal-angular';
 
+const GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
 @Component({
   selector: 'app-vehicles-list',
@@ -14,12 +16,29 @@ export class VehiclesListComponent implements OnInit {
   @Input() public editedVehicleId: any;
   public vehiclesList: IVehicleAngularModel[] = [];
   public selectedVehicle: IVehicleAngularModel | null = null;
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute) {
-    http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles').subscribe(result => {
-      this.vehiclesList = result;
-      this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
-      this.loadingVehicles = false;
-    }, error => console.error(error));
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute, private authService: MsalService) {
+
+    const activeAccount = this.authService.instance.getActiveAccount();
+    if (activeAccount) {
+      this.authService.instance.acquireTokenSilent({
+        account: activeAccount,
+        scopes: ['user.read'],
+      }).then(response => {
+        //Declare headers as object type with Bearer token.
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + response.accessToken,
+        });
+        console.log(headers.keys().map(key => `${key}: ${headers.get(key)}`).join('\n'));
+        http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
+        //http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
+          this.vehiclesList = result;
+          this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
+          this.loadingVehicles = false;
+        }, error => console.error(error));
+      });
+    }
+
     console.log("Adres do kontrollera: "+baseUrl);
     console.log("Pobrano "+this.vehiclesList.length+' pojazdów do wyświetlenia.');
     
