@@ -38,11 +38,37 @@
           <li *ngIf="loginDisplay" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/profile']">Użytkownik</a>
           </li>
+
+          <li class="nav-item" *ngIf="auth.isAuthenticated$ | async">
+            <button class="btn btn-link p-0"
+                    style="min-width: unset"
+                    id="qsLogoutBtn"
+                    (click)="logout()">
+              Log out
+            </button>
+          </li>
+
+        </ul>
+
+        <ul class="navbar-nav d-none d-md-block">
+          <!-- Login button: show if NOT authenticated -->
+          <li class="nav-item"
+              *ngIf="(auth.isAuthenticated$ | async) === false">            
+            <button id="qsLoginBtn"
+                    class="btn btn-primary btn-margin"
+                    (click)="auth.loginWithPopup()">
+              Log in2
+            </button>
+          </li>
+          <!-- / Login button -->
+          <!-- Fullsize dropdown: show if authenticated -->
+          
+          <!-- /Fullsize dropdown -->
         </ul>
         <!--<app-login-menu></app-login-menu>-->
         <!--<button *ngIf="!loginDisplay" (click)="login()">Login</button>
-        <span *ngIf="loginDisplay">{{userName}}</span>
-        <button *ngIf="loginDisplay" (click)="logout()">Logout</button>-->
+  <span *ngIf="loginDisplay">{{userName}}</span>
+  <button *ngIf="loginDisplay" (click)="logout()">Logout</button>-->
       </div>
     </div>
   </nav>

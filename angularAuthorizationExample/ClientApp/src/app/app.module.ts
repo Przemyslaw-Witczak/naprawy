@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import { AuthModule } from '@auth0/auth0-angular';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -64,11 +64,19 @@ const isIE =
     ]),
     AuthModule.forRoot({
       domain: 'dev-kadj1mmr6t5mt0pv.eu.auth0.com',
-      clientId: 'TfRF8wrf2444jZ8bUz36wlNDvIYSIXQd'
+      clientId: 'kue1IOBTqYQM8xjqDRymGmYo74FWmro8',
+      authorizationParams: {
+        redirect_uri: 'http://localhost:44464', 
+        client_secret: 'i7kuQCf8eSpFyGZ97JZYowa9ci-UV4N-GZzpRwnlJri64kLSOGcq4_ODUVsxujqg'
+      }
     }),
   ],
   providers: [
-    // { provide: HTTP_INTERCEPTORS, multi: true }    
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    }    
   ],
   bootstrap: [AppComponent]
 })

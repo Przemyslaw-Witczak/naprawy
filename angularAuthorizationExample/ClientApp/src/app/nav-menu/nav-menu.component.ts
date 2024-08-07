@@ -1,6 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
 import { AuthenticationResult, InteractionStatus, InteractionType, PopupRequest, RedirectRequest } from '@azure/msal-browser';
+import { AuthService } from '@auth0/auth0-angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
@@ -17,9 +18,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
-    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
+    public auth: AuthService
   ) { }
     ngOnDestroy(): void {
       this._destroying$.next(undefined);
@@ -27,14 +26,14 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     }
   ngOnInit(): void {
     
-      this.msalBroadcastService.inProgress$
-        .pipe(
-          filter((status: InteractionStatus) => status === InteractionStatus.None),
-          takeUntil(this._destroying$)
-        )
-        .subscribe(() => {
-          this.setLoginDisplay();
-        });
+      //this.msalBroadcastService.inProgress$
+      //  .pipe(
+      //    filter((status: InteractionStatus) => status === InteractionStatus.None),
+      //    takeUntil(this._destroying$)
+      //  )
+      //  .subscribe(() => {
+      //    this.setLoginDisplay();
+      //  });
     }
 
   collapse() {
