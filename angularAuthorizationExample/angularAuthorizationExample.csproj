@@ -8,20 +8,24 @@
     <SpaProxyServerUrl>https://localhost:44464</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1b68e396-2d0c-4824-b6db-a61f87c29010</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1" />
     <PackageReference Include="FbClientCore" Version="1.0.1" />
     <PackageReference Include="FbClientBase" Version="1.0.0" />  
     <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.0.0" />  
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.19.1" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="3.0.1" />  
     <PackageReference Include="NLog" Version="4.7.14" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace angularAuthorizationExample.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class VehiclesController : ControllerBase

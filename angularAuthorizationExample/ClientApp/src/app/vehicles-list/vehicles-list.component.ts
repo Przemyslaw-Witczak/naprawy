@@ -30,8 +30,8 @@ export class VehiclesListComponent implements OnInit {
           Authorization: 'Bearer ' + response.accessToken,
         });
         console.log(headers.keys().map(key => `${key}: ${headers.get(key)}`).join('\n'));
-        http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
-        //http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
+        //http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
+        http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
           this.vehiclesList = result;
           this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
           this.loadingVehicles = false;
