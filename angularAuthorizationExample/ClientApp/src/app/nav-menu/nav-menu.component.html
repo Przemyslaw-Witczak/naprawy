@@ -53,7 +53,12 @@
         <ul class="navbar-nav d-none d-md-block">
           <!-- Login button: show if NOT authenticated -->
           <li class="nav-item"
-              *ngIf="(auth.isAuthenticated$ | async) === false">            
+              *ngIf="(auth.isAuthenticated$ | async) === false">
+            <button id="qsLoginBtn"
+                    class="btn btn-primary btn-margin"
+                    (click)="loginWithRedirect()">
+              Log in1
+            </button>
             <button id="qsLoginBtn"
                     class="btn btn-primary btn-margin"
                     (click)="auth.loginWithPopup()">

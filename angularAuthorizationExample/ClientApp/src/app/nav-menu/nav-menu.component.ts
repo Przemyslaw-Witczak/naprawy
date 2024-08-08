@@ -1,9 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MSAL_GUARD_CONFIG, MsalBroadcastService, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
-import { AuthenticationResult, InteractionStatus, InteractionType, PopupRequest, RedirectRequest } from '@azure/msal-browser';
 import { AuthService } from '@auth0/auth0-angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-nav-menu',
@@ -18,7 +17,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
-    public auth: AuthService
+    public auth: AuthService,
+    @Inject(DOCUMENT) private doc: Document
   ) { }
     ngOnDestroy(): void {
       this._destroying$.next(undefined);
@@ -88,4 +88,15 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   //    });
   //  }
   //}
+
+  loginWithRedirect() {
+    const token = this.auth.getAccessTokenSilently();
+    console.log(token); // Inspect the token
+
+    this.auth.loginWithRedirect();
+  }
+
+  logout() {
+    this.auth.logout({ logoutParams: { returnTo: this.doc.location.origin } });
+  }
 }

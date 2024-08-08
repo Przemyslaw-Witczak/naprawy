@@ -66,7 +66,7 @@ const isIE =
       domain: 'dev-kadj1mmr6t5mt0pv.eu.auth0.com',
       clientId: 'kue1IOBTqYQM8xjqDRymGmYo74FWmro8',
       authorizationParams: {
-        redirect_uri: 'http://localhost:44464', 
+        redirect_uri: 'https://localhost:44464', 
         client_secret: 'i7kuQCf8eSpFyGZ97JZYowa9ci-UV4N-GZzpRwnlJri64kLSOGcq4_ODUVsxujqg'
       }
     }),
