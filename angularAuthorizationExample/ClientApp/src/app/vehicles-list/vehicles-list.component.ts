@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { IVehicleAngularModel } from './VehicleAngularModel';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MsalService } from '@azure/msal-angular';
+import { AuthService } from '@auth0/auth0-angular';
 
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
@@ -16,28 +16,54 @@ export class VehiclesListComponent implements OnInit {
   @Input() public editedVehicleId: any;
   public vehiclesList: IVehicleAngularModel[] = [];
   public selectedVehicle: IVehicleAngularModel | null = null;
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute, private authService: MsalService) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private route: ActivatedRoute, private authService: AuthService) {
 
-    const activeAccount = this.authService.instance.getActiveAccount();
-    if (activeAccount) {
-      this.authService.instance.acquireTokenSilent({
-        account: activeAccount,
-        scopes: ['user.read'],
-      }).then(response => {
-        //Declare headers as object type with Bearer token.
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + response.accessToken,
-        });
-        console.log(headers.keys().map(key => `${key}: ${headers.get(key)}`).join('\n'));
-        http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
-        //http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
-          this.vehiclesList = result;
-          this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
-          this.loadingVehicles = false;
-        }, error => console.error(error));
-      });
-    }
+    this.authService.isAuthenticated$.subscribe(
+      (value) => {
+        console.log("Is authenticated: " + value);
+      })
+    this.authService.idTokenClaims$.subscribe(
+      (claims) => {
+        const token = claims?.__raw;
+        console.log("Token?");
+        console.log(token);
+
+        if (token) {
+          // Include the token in the headers
+          const headers = { Authorization: `Bearer ${token}` };
+
+          // Make a call to the API with the token
+          http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
+          //http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
+            this.vehiclesList = result;
+            this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
+            this.loadingVehicles = false;
+          }, error => console.error(error));
+          //});
+        }
+      }
+    )
+
+    //const activeAccount = this.authService.instance.getActiveAccount();
+    //if (activeAccount) {
+    //  this.authService.instance.acquireTokenSilent({
+    //    account: activeAccount,
+    //    scopes: ['user.read'],
+    //  }).then(response => {
+    //    //Declare headers as object type with Bearer token.
+    //    const headers = new HttpHeaders({
+    //      'Content-Type': 'application/json',
+    //      Authorization: 'Bearer ' + response.accessToken,
+    //    });
+    //    console.log(headers.keys().map(key => `${key}: ${headers.get(key)}`).join('\n'));
+    //    http.get<IVehicleAngularModel[]>(baseUrl + 'Vehicles', { headers: headers }).subscribe(result => {
+    //    //http.get<IVehicleAngularModel[]>('http://localhost:5297/Vehicles', { headers: headers }).subscribe(result => {
+    //      this.vehiclesList = result;
+    //      this.selectedVehicle = this.selectVehicleById(this.editedVehicleId);
+    //      this.loadingVehicles = false;
+    //    }, error => console.error(error));
+    //  });
+    //}
 
     console.log("Adres do kontrollera: "+baseUrl);
     console.log("Pobrano "+this.vehiclesList.length+' pojazdów do wyświetlenia.');

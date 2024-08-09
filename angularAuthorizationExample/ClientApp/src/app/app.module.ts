@@ -67,7 +67,7 @@ const isIE =
       clientId: 'kue1IOBTqYQM8xjqDRymGmYo74FWmro8',
       authorizationParams: {
         redirect_uri: 'https://localhost:44464', 
-        client_secret: 'i7kuQCf8eSpFyGZ97JZYowa9ci-UV4N-GZzpRwnlJri64kLSOGcq4_ODUVsxujqg'
+        client_secret: 'xQd1QHvDsRzKGnD3Do-68bMVy1i_9CVQ8VuKJXQszn3coWuhLcbIe55pDz-3hFuF'
       }
     }),
   ],

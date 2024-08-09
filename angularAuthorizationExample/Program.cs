@@ -24,17 +24,22 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://login.microsoftonline.com/e9d9b795-b2a5-435c-97c9-77a382765404";
-                options.Audience = "api://6ced2e7e-d6b4-4a5d-8f0c-57c70a9b2c8d"; //client id
+                options.Authority = "https://dev-kadj1mmr6t5mt0pv.eu.auth0.com/";
+                options.Audience = "kue1IOBTqYQM8xjqDRymGmYo74FWmro8"; //client id
+                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
                     ValidateIssuer = true,
+                    ValidIssuer = $"https://dev-kadj1mmr6t5mt0pv.eu.auth0.com/",
                     ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = false                    
+                    ValidateLifetime = true
                 };
             });
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
